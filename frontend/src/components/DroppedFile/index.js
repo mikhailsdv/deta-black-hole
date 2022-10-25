@@ -4,14 +4,12 @@ import useApi from "../../api/useApi"
 
 import Typography from "../Typography"
 import Collapse from "@mui/material/Collapse"
-import Button from "../Button"
-import {FlatIcon, createFlatIcon} from "../FlatIcon"
 
 import styles from "./index.module.scss"
 
 export default function DroppedFile(props) {
 	const {onFinish, file, className, classes = {}} = props
-	const {id, name, size} = file
+	const {name, size} = file
 
 	const {uploadPhoto} = useApi()
 
@@ -57,7 +55,7 @@ export default function DroppedFile(props) {
 			console.error(err)
 			setError(true)
 		}
-	}, [file, id, uploadPhoto, progress, onFinish])
+	}, [file, uploadPhoto, onFinish])
 
 	useEffect(() => {
 		if (progress > 0) {

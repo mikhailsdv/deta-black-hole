@@ -13,7 +13,7 @@ import Image from "../Image"
 import Card from "../Card"
 import Button from "../Button"
 import IconButton from "../IconButton"
-import {FlatIcon, createFlatIcon} from "../FlatIcon"
+import {FlatIcon} from "../FlatIcon"
 
 import styles from "./index.module.scss"
 import useApi from "../../api/useApi"
@@ -51,7 +51,7 @@ export default function Photo(props) {
 			variant: "default",
 			message: "Downloading. Just a second...",
 		})
-	}, [src, drive_name])
+	}, [src, drive_name, enqueueSnackbar])
 
 	const copyUrl = useCallback(() => {
 		const testUrl = urlJoin(process.env.REACT_APP_API_BASE_URL, url)
@@ -71,7 +71,7 @@ export default function Photo(props) {
 			variant: "success",
 			message: "Direct image link copied to clipboard!",
 		})
-	}, [url])
+	}, [url, enqueueSnackbar])
 
 	const copyImage = useCallback(async () => {
 		try {
@@ -101,7 +101,7 @@ export default function Photo(props) {
 			})
 			setLoadingCopyImage(false)
 		}
-	}, [src, enqueueSnackbar])
+	}, [enqueueSnackbar])
 
 	const confirmDelete = useCallback(
 		e => {
