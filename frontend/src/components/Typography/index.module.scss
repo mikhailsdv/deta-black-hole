@@ -1,0 +1,23 @@
+@import "../../styles/variables.scss";
+
+.root {
+	&.high {
+		color: $emphasis-high;
+	}
+
+	&.medium {
+		color: $emphasis-medium;
+	}
+
+	&.outlined {
+		color: $emphasis-outlined;
+	}
+
+	& > svg {
+		position: relative;
+		width: 1em;
+		height: 1em;
+		vertical-align: baseline;
+		top: 4px;
+	}
+}

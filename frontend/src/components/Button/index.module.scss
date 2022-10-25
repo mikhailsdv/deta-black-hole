@@ -1,0 +1,135 @@
+@import "../../styles/variables.scss";
+
+.root {
+	height: 54px;
+	padding: 17px 40px;
+	font-weight: 500;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: inherit;
+	overflow: hidden;
+	user-select: none;
+	white-space: nowrap;
+	border-radius: 8px;
+	outline: none;
+	transition: $transition;
+	&:hover {
+		background-color: transparent;
+	}
+	&[disabled] {
+		opacity: 0.6;
+		filter: saturate(0.9) contrast(0.6);
+		pointer-events: none;
+	}
+	&.small {
+		height: 44px;
+		padding: 12px 20px;
+	}
+	&.fullWidth {
+		width: 100%;
+	}
+	&.loading {
+		pointer-events: none;
+
+		.preloader {
+			opacity: 1;
+		}
+		.iconBefore,
+		.iconAfter,
+		.label {
+			opacity: 0;
+		}
+	}
+
+	&.primary {
+		background-color: $accent-color;
+		color: white;
+		.preloader {
+			color: white;
+		}
+
+		&:not([disabled]):hover {
+			background-color: $hover-color;
+		}
+	}
+
+	&.no-border {
+		color: $accent-color;
+		.preloader {
+			color: $accent-color;
+		}
+
+		&:not([disabled]):hover {
+			color: $hover-color;
+			.preloader {
+				color: $hover-color;
+			}
+		}
+	}
+
+	&.negative {
+		background-color: $error-color;
+		color: #ffffff;
+		//box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+	}
+	&.positive {
+		background-color: $positive-color;
+		color: #ffffff;
+		//box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+	}
+
+	@mixin icon {
+		position: relative;
+		font-size: inherit;
+		width: 20px;
+		height: 20px;
+		flex: none;
+		color: inherit;
+		margin-top: 1px;
+		z-index: 2;
+	}
+	.iconBefore {
+		@include icon;
+		margin-right: 8px;
+	}
+	.iconAfter {
+		@include icon;
+		margin-left: 8px;
+	}
+
+	.preloader {
+		position: absolute;
+		height: 20px;
+		width: 20px;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		margin: auto;
+		color: inherit;
+		transition: $transition;
+		opacity: 0;
+		z-index: 2;
+	}
+	.label {
+		color: inherit;
+		z-index: 2;
+
+		&.pulse {
+			animation: pulse 2s ease-in-out infinite;
+		}
+	}
+}
+
+@keyframes pulse {
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.4;
+	}
+	100% {
+		opacity: 1;
+	}
+}

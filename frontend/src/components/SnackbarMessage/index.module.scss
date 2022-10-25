@@ -1,0 +1,54 @@
+@import "../../styles/variables.scss";
+
+.root {
+	position: relative;
+	display: flex;
+	background-color: white;
+	padding: 16px;
+	align-items: flex-start;
+	//max-width: $max-width;
+	margin: 0 auto;
+	width: 100%;
+	overflow: hidden;
+	border-radius: 8px;
+	&.success {
+		background-color: $positive-color;
+	}
+	&.error {
+		background-color: $error-color;
+	}
+	&.warning {
+		background-color: rgb(236, 134, 0);
+	}
+	&.default {
+		background-color: $block-placeholder-color;
+	}
+
+	.message {
+		flex-grow: 1;
+		width: calc(100% - 24px - 12px);
+		color: white;
+
+		.messageIcon {
+			color: inherit;
+			display: inline;
+			width: 1em;
+			height: 1em;
+			margin-right: 8px;
+			vertical-align: middle;
+		}
+
+		a {
+			color: inherit;
+			text-decoration: underline;
+		}
+	}
+
+	.closeIcon {
+		flex: none;
+		color: $emphasis-high;
+		font-size: 24px;
+		cursor: pointer;
+		margin-left: 12px;
+	}
+}

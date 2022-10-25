@@ -1,0 +1,10 @@
+@import "../../styles/variables.scss";
+
+/*#root
+	> div[class*="makeStyles-top"][class*="makeStyles-right"][class*="makeStyles-root"],
+#root > div[class^="jss"][class*=" jss"] {
+	padding-top: 0;
+	@media screen and (max-width: $md) {
+		padding-top: 65px;
+	}
+}*/

@@ -1,0 +1,48 @@
+@import "../../styles/variables.scss";
+
+.root {
+	$padding: 8px;
+	$width: 44px;
+	$height: 24px;
+	$thumbSize: 18px;
+
+	position: relative;
+	width: $width + ($padding * 2);
+	height: $height + ($padding * 2);
+	padding: $padding;
+
+	&.unchecked:hover {
+		.track {
+			background-color: $emphasis-medium;
+		}
+	}
+	&.checked:hover {
+		.track {
+			background-color: $hover-color;
+		}
+	}
+
+	.track {
+		background-color: $block-placeholder-color;
+		opacity: 1;
+		border-radius: $height;
+	}
+	.checked + .track {
+		background-color: $accent-color;
+		opacity: 1;
+	}
+
+	.switchBase {
+		padding: ($height + ($padding * 2) - $thumbSize) / 2;
+
+		.thumb {
+			width: $thumbSize;
+			height: $thumbSize;
+			box-shadow: 0px 2px 4px rgba(#00230b, 0.2);
+		}
+	}
+
+	.checked.switchBase .thumb {
+		background-color: white;
+	}
+}

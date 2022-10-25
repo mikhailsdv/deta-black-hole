@@ -1,0 +1,14 @@
+@import "../../styles/variables.scss";
+
+.root {
+	position: relative;
+	border-radius: 8px;
+	user-select: none;
+	object-fit: cover;
+	object-position: center;
+	background-color: $block-placeholder-color;
+
+	&.loaded {
+		background-color: transparent;
+	}
+}

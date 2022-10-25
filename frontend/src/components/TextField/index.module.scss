@@ -1,0 +1,102 @@
+@import "../../styles/variables.scss";
+
+.wrapper {
+	position: relative;
+}
+
+.root {
+	position: relative;
+	width: 100%;
+	vertical-align: top;
+	border-radius: 10px;
+	box-shadow: inset 0 0 0 1px $emphasis-outlined;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	transition: $transition;
+	&[data-focused="true"] {
+		box-shadow: inset 0 0 0 2px $accent-color;
+	}
+	&[data-error="true"] {
+		box-shadow: inset 0 0 0 2px $error-color;
+	}
+
+	.icon {
+		position: relative;
+		width: 24px;
+		height: 24px;
+		margin-left: 16px;
+		flex: none;
+		color: $emphasis-medium;
+		transition: $transition;
+		z-index: 9;
+	}
+	&[data-focused="true"] .icon {
+		color: $accent-color;
+	}
+	&[data-error="true"] .icon {
+		color: $error-color;
+	}
+}
+
+.Input {
+	background-color: transparent !important;
+	color: $emphasis-high;
+	&:after {
+		content: unset;
+	}
+	&:before {
+		content: unset;
+	}
+
+	.input {
+		background-color: transparent !important;
+		padding: 23px 16px 10px 16px;
+
+		&:-internal-autofill-previewed,
+		&:-internal-autofill-selected,
+		&:-webkit-autofill::first-line,
+		&:-webkit-autofill,
+		&:-webkit-autofill:hover,
+		&:-webkit-autofill:focus,
+		&:-webkit-autofill:active {
+			-webkit-text-fill-color: $emphasis-high !important;
+			font-family: $font-family !important;
+			-webkit-background-clip: text;
+		}
+
+		&[type="number"] {
+			-moz-appearance: textfield;
+			&::-webkit-outer-spin-button,
+			&::-webkit-inner-spin-button {
+				-webkit-appearance: none;
+				margin: 0;
+			}
+			&::outer-spin-button,
+			&::inner-spin-button {
+				-webkit-appearance: none;
+				margin: 0;
+			}
+		}
+	}
+}
+
+.label {
+	white-space: nowrap;
+	color: $emphasis-medium !important;
+	transform: translate(16px, 17px) scale(1);
+}
+.labelShrink {
+	transform: translate(16px, 8px) scale(0.75);
+}
+.labelDisabled {
+	opacity: 0.7;
+}
+
+.helperText {
+	margin: 2px 0 0 0;
+	color: $emphasis-outlined;
+	&[data-error="true"] {
+		color: $error-color;
+	}
+}

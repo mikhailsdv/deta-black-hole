@@ -1,0 +1,51 @@
+@import "../../styles/variables.scss";
+
+.root {
+	position: relative;
+}
+
+.disabled {
+	opacity: 0.7 !important;
+}
+
+.menuPaper {
+	margin-top: 3px;
+	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.InputRoot {
+	//padding-top: 0 !important;
+	//padding-bottom: 0 !important;
+	//padding-left: 0 !important;
+	//overflow: hidden;
+	&:hover .notchedOutline {
+		border-color: $emphasis-outlined;
+	}
+	.notchedOutline {
+		border-color: $emphasis-outlined;
+	}
+	&.error {
+		.notchedOutline {
+			border-width: 2px;
+			border-color: $error-color !important;
+		}
+	}
+	&.focused {
+		.notchedOutline {
+			border-color: $accent-color;
+		}
+	}
+	&.disabled {
+		opacity: 0.7;
+	}
+
+	.input {
+		padding: 23px 16px 10px 16px;
+	}
+}
+
+.selectRoot {
+	font-size: 16px;
+	padding: 12px 20px;
+	min-height: 16px;
+}

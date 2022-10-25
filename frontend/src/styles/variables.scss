@@ -1,0 +1,25 @@
+$font-family: "Manrope", "Roboto", "Helvetica", "Arial", sans-serif;
+$transition: all 0.5s cubic-bezier(0.25, 0.8, 0.05, 1);
+
+$header-height: 56px;
+$drawer-open-width: 300px;
+$drawer-minimized-width: 80px;
+
+$background-color: #1c1b1b;
+$paper-color: #32302f;
+$accent-color: #ef39a8;
+$hover-color: #bd399c;
+$error-color: #da0b20;
+$warning-color: #fcbc00;
+$positive-color: #0fb682;
+$block-placeholder-color: #423f3e;
+
+$emphasis-high: white;
+$emphasis-medium: fade-out(white, .24);
+$emphasis-outlined: fade-out(white, .38);
+
+$xl: 1920px - 1px;
+$lg: 1280px - 1px;
+$md: 960px - 1px;
+$sm: 600px - 1px;
+$xs: 480px - 1px;

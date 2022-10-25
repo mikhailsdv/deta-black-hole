@@ -1,0 +1,40 @@
+@import "../../styles/variables.scss";
+
+.root {
+	position: relative;
+	padding: 8px;
+
+	.imageWrapper {
+		position: relative;
+		width: 100%;
+		padding-top: 74%;
+
+		.image {
+			position: absolute;
+            top: 0;
+			width: 100%;
+			height: 100%;
+			cursor: pointer;
+			transition: $transition;
+			&:hover {
+				filter: brightness(50%);
+			}
+		}
+	}
+
+	.download {
+		margin-top: 6px;
+	}
+
+	.actions {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		gap: 8px;
+		margin-top: 6px;
+
+		& > * {
+			flex-grow: 1;
+		}
+	}
+}

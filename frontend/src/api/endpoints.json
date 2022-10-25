@@ -1,0 +1,44 @@
+[
+	{
+		"name": "uploadPhotos",
+		"url": "/photos",
+		"method": "post",
+		"params": ["photos"],
+		"headers": {
+			"Content-Type": "multipart/form-data"
+		},
+		"timeout": 0
+	},
+	{
+		"name": "uploadPhoto",
+		"url": "/photo",
+		"method": "post",
+		"params": ["photo"],
+		"headers": {
+			"Content-Type": "multipart/form-data"
+		},
+		"timeout": 0
+	},
+	{
+		"name": "getPhotos",
+		"url": "/photos",
+		"method": "get",
+		"params": ["limit", "offset"]
+	},
+	{
+		"name": "getPhoto",
+		"url": "/photo/{drive_name}",
+		"method": "get"
+	},
+	{
+		"name": "deletePhoto",
+		"url": "/photo",
+		"method": "delete",
+		"params": ["key"]
+	},
+	{
+		"name": "getSinglePhoto",
+		"url": "/key/{key}",
+		"method": "get"
+	}
+]

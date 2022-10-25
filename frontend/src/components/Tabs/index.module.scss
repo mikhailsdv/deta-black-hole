@@ -1,0 +1,23 @@
+@import "../../styles/variables.scss";
+
+.root {
+	// border-bottom: solid 1px #D6DAE0;
+	@media screen and (max-width: $md) {
+		width: 100%;
+	}
+}
+
+.scroller {
+	display: flex;
+	align-items: center;
+	height: 100%;
+}
+
+.flexContainer {
+	height: 100%;
+}
+
+.indicator {
+	background-color: $accent-color;
+	height: 3px;
+}

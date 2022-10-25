@@ -1,0 +1,20 @@
+{
+  "short_name": "Black Hole",
+  "name": "Deta Black Hole",
+  "icons": [
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f7fa",
+  "description": "A black hole for your photos"
+}

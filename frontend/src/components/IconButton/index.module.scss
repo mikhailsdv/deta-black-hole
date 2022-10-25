@@ -1,0 +1,67 @@
+@import "../../styles/variables.scss";
+
+.root {
+	position: relative;
+	height: 56px;
+	width: 56px;
+	min-width: 56px;
+	border-radius: 8px;
+	padding: 0;
+	outline: none;
+	transition: $transition;
+	&[disabled] {
+		opacity: 0.6;
+		filter: saturate(0.9) contrast(0.6);
+		pointer-events: none;
+	}
+	&.small {
+		height: 44px;
+		width: 44px;
+		min-width: 44px;
+	}
+
+	&.primary {
+		color: white;
+		background: $accent-color;
+		.preloader {
+			color: white;
+		}
+
+		&:not([disabled]):hover {
+			background-color: $hover-color;
+		}
+	}
+
+	&.secondary {
+		background-color: fade-out($accent-color, 0.9);
+		color: $hover-color;
+		transition: $transition;
+		.preloader {
+			color: $hover-color;
+		}
+
+		&:not([disabled]):hover {
+			background-color: fade-out($accent-color, 0.8);
+		}
+	}
+
+	&.loading {
+		pointer-events: none;
+
+		.preloader {
+			opacity: 1;
+		}
+	}
+
+	.preloader {
+		color: inherit;
+	}
+	.icon {
+		color: inherit;
+
+		& > svg {
+			width: 24px;
+			height: 24px;
+		}
+	}
+}

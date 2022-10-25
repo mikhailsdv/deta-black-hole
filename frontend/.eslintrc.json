@@ -1,0 +1,17 @@
+{
+  "extends": ["react-app"],
+  "rules": {
+    "import/no-anonymous-default-export": "off",
+    "@next/next/no-img-element": "off",
+    "no-irregular-whitespace": "off",
+    "prefer-const": "error",
+    "no-mixed-spaces-and-tabs": "off",
+    "no-extra-semi": "off"
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "commonjs": true,
+    "node": true
+  }
+}

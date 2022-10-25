@@ -1,0 +1,43 @@
+@import "../../styles/variables.scss";
+
+.root {
+	z-index: 1302 !important;
+	backdrop-filter: blur(15px);
+
+	.paper {
+		margin: 14px;
+		background-color: $background-color;
+		transform: translate(0); //fix overflow
+
+		.close {
+			position: absolute;
+			top: 6px;
+			right: 6px;
+			width: 24px;
+			height: 24px;
+			padding: 5px;
+			cursor: pointer;
+			flex: none;
+			z-index: 9;
+			color: $emphasis-high;
+
+			svg {
+				width: 26px;
+				height: 26px;
+			}
+		}
+
+		.title {
+			//color: $light_main-color;
+		}
+
+		.text {
+			//color: $light_regular-text-color;
+		}
+
+		.action {
+			//overflow: hidden;
+			//border-bottom-right-radius: 40px;
+		}
+	}
+}
