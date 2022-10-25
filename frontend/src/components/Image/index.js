@@ -1,22 +1,27 @@
-import React, {useEffect, useRef, useState} from "react"
+import React, {useEffect, useRef, useCallback, useState} from "react"
 
 import classnames from "classnames"
 import styles from "./index.module.scss"
 
 export default function Image(props) {
-	const {src, className, classes = {}, ...rest} = props
+	const {src, onLoad: onLoadProp, className, classes = {}, ...rest} = props
 
 	const [isLoaded, setLoaded] = useState(false)
 	const [imageSrc, setImageSrc] = useState(src)
 	const [isError, setIsError] = useState(false)
 	const imgEl = useRef(null)
 
-	const onLoad = e => {
-		setLoaded(true)
-	}
-	const onError = e => {
+	const onLoad = useCallback(
+		e => {
+			setLoaded(true)
+			onLoadProp(e.target)
+		},
+		[onLoadProp]
+	)
+
+	const onError = useCallback(e => {
 		setIsError(true)
-	}
+	}, [])
 
 	useEffect(() => {
 		const img = imgEl.current
@@ -26,7 +31,7 @@ export default function Image(props) {
 			img.removeEventListener("load", onLoad)
 			img.removeEventListener("error", onError)
 		}
-	}, [src])
+	}, [src, onLoad, onError])
 
 	useEffect(() => {
 		src ? setImageSrc(src) : setIsError(true)
@@ -42,6 +47,7 @@ export default function Image(props) {
 			alt=""
 			src={actualSrc}
 			ref={imgEl}
+			crossOrigin="anonymous"
 			className={classnames(
 				styles.root,
 				className,

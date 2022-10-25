@@ -22,7 +22,6 @@ const savePhotos = async (photos) => {
 			key = baseItem.key
 			const driveItem = await drive.put(`${baseItem.key}${extension}`, {data: photo.data})
 			saved.push(baseItem.key)
-			console.log("Saved photo", baseItem, driveItem)
 		} catch (err) {
 			console.error(err)
 			if (key) await db.delete(key)
@@ -51,7 +50,6 @@ const savePhoto = async (photo) => {
 			url: `/photo/${drive_name}`,
 		}, key)
 		const driveItem = await drive.put(`${key}${extension}`, {data: photo.data})
-		console.log("Saved photo", baseItem, driveItem)
 		return {
 			key,
 		}

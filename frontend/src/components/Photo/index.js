@@ -43,6 +43,7 @@ export default function Photo(props) {
 	const [loadingCopyImage, setLoadingCopyImage] = useState(false)
 	const [loadingDelete, setLoadingDelete] = useState(false)
 	const clickTimer = useRef(null)
+	const imgRef = useRef(null)
 
 	const download = useCallback(() => {
 		downloadFile(src, drive_name)
@@ -53,7 +54,19 @@ export default function Photo(props) {
 	}, [src, drive_name])
 
 	const copyUrl = useCallback(() => {
-		copy(urlJoin(window.location.href, url))
+		const testUrl = urlJoin(process.env.REACT_APP_API_BASE_URL, url)
+		if (/^https?:\/\//.test(testUrl)) {
+			copy(testUrl)
+		} else {
+			copy(
+				urlJoin(
+					window.location.href,
+					process.env.REACT_APP_API_BASE_URL,
+					url
+				)
+			)
+		}
+
 		enqueueSnackbar({
 			variant: "success",
 			message: "Direct image link copied to clipboard!",
@@ -62,19 +75,24 @@ export default function Photo(props) {
 
 	const copyImage = useCallback(async () => {
 		try {
-			setLoadingCopyImage(true)
-			const img = document.createElement("img")
-			img.setAttribute("src", src)
-			img.setAttribute("crossOrigin", "anonymous")
-			img.addEventListener("load", async () => {
-				const blob = await getBlobFromImageElement(img)
-				await copyBlobToClipboard(blob)
-				enqueueSnackbar({
-					variant: "success",
-					message: "Image copied to clipboard!",
+			if (!imgRef.current) {
+				return enqueueSnackbar({
+					variant: "warning",
+					message: "Photo isn't loaded yet. Please, wait...",
 				})
-				setLoadingCopyImage(false)
+			}
+			let clonedImage = imgRef.current.cloneNode(true)
+			clonedImage.classList.remove(...Array.from(clonedImage.classList))
+			setLoadingCopyImage(true)
+			const blob = await getBlobFromImageElement(clonedImage)
+			await copyBlobToClipboard(blob)
+			clonedImage.remove()
+			clonedImage = null
+			enqueueSnackbar({
+				variant: "success",
+				message: "Image copied to clipboard!",
 			})
+			setLoadingCopyImage(false)
 		} catch (err) {
 			console.error(err.name, err.message)
 			enqueueSnackbar({
@@ -98,6 +116,10 @@ export default function Photo(props) {
 		},
 		[enqueueSnackbar]
 	)
+
+	const onLoad = useCallback(img => {
+		imgRef.current = img
+	}, [])
 
 	const onDelete = useCallback(async () => {
 		clearTimeout(clickTimer.current)
@@ -125,6 +147,7 @@ export default function Photo(props) {
 					src={src}
 					className={styles.image}
 					onClick={() => onZoom(src)}
+					onLoad={onLoad}
 				/>
 			</div>
 

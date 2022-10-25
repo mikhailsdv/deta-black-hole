@@ -12,6 +12,13 @@
 	&.fadeOut {
 		opacity: 0;
 	}
+	&.error {
+		background-color: fade-out($error-color, .7);
+
+		.progress {
+			opacity: 0;
+		}
+	}
 
 	.progress {
 		position: absolute;
@@ -45,5 +52,12 @@
 		flex-direction: column;
 		justify-content: center;
 		min-height: 80px;
+
+		.tryAgain {
+			color: $error-color;
+			text-decoration: underline;
+			cursor: pointer;
+			font-weight: 500;
+		}
 	}
 }

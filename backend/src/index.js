@@ -27,14 +27,19 @@ expressApp.post("/photos", async (req, res) => {
 	res.json({items, count: items.length})
 })
 
+expressApp.get("/photos", async (req, res) => {
+	const photos = await getPhotos({limit: Number(req.query.limit), offset: Number(req.query.offset)})
+	res.json(photos)
+})
+
 expressApp.post("/photo", async (req, res) => {
 	const photo = await savePhoto(req.files.photo)
 	res.json(photo)
 })
 
-expressApp.get("/photos", async (req, res) => {
-	const photos = await getPhotos({limit: req.query.limit, offset: req.query.offset})
-	res.json(photos)
+expressApp.delete("/photo", async (req, res) => {
+	const status = await deletePhoto({key: req.body.key})
+	res.send({status})
 })
 
 expressApp.get("/photo/:drive_name", async (req, res) => {
@@ -53,11 +58,6 @@ expressApp.get("/key/:key", async (req, res) => {
 		return
 	}
 	res.send(photo)
-})
-
-expressApp.delete("/photo", async (req, res) => {
-	const status = await deletePhoto({key: req.body.key})
-	res.send({status})
 })
 
 module.exports = expressApp

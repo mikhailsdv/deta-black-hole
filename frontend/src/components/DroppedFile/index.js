@@ -1,9 +1,11 @@
-import React, {useCallback, useState, useEffect} from "react"
+import React, {useState, useEffect, useCallback} from "react"
 import classnames from "classnames"
 import useApi from "../../api/useApi"
 
 import Typography from "../Typography"
 import Collapse from "@mui/material/Collapse"
+import Button from "../Button"
+import {FlatIcon, createFlatIcon} from "../FlatIcon"
 
 import styles from "./index.module.scss"
 
@@ -22,42 +24,47 @@ export default function DroppedFile(props) {
 	const [collapse, setCollapse] = useState(false)
 	const [fadeOut, setFadeOut] = useState(false)
 
-	useEffect(() => {
-		if (progress > 0) {
-			return
-		}
+	const upload = useCallback(async () => {
+		setError(false)
 		setProgress(0.01)
+		setError(false)
 		const fileReader = new FileReader()
 		fileReader.readAsDataURL(file)
 		fileReader.addEventListener("load", fileReaderEvent => {
 			setSrc(fileReaderEvent.target.result)
 		})
 		setError(false)
-		;(async () => {
-			try {
-				const {key} = await uploadPhoto(
-					{photo: file},
-					{
-						onUploadProgress: ({progress}) => setProgress(progress),
-					}
-				)
-				if (!key) {
-					return setError(true)
+		try {
+			const {key} = await uploadPhoto(
+				{photo: file},
+				{
+					onUploadProgress: ({progress}) => setProgress(progress),
 				}
-				onFinish(key)
-				setFinished(true)
-				setTimeout(() => {
-					setFadeOut(true)
-					setTimeout(() => {
-						setCollapse(true)
-					}, 1000)
-				}, 2000)
-			} catch (err) {
-				console.error(err)
+			)
+			if (!key) {
 				setError(true)
+				return
 			}
-		})()
+			onFinish(key)
+			setFinished(true)
+			setTimeout(() => {
+				setFadeOut(true)
+				setTimeout(() => {
+					setCollapse(true)
+				}, 500)
+			}, 2000)
+		} catch (err) {
+			console.error(err)
+			setError(true)
+		}
 	}, [file, id, uploadPhoto, progress, onFinish])
+
+	useEffect(() => {
+		if (progress > 0) {
+			return
+		}
+		upload()
+	}, [upload, progress])
 
 	return (
 		<Collapse in={!collapse}>
@@ -66,7 +73,8 @@ export default function DroppedFile(props) {
 					styles.root,
 					className,
 					classes.root,
-					fadeOut && styles.fadeOut
+					fadeOut && styles.fadeOut,
+					error && styles.error
 				)}
 			>
 				<div
@@ -86,13 +94,24 @@ export default function DroppedFile(props) {
 					<Typography variant={"body2"} emphasis={"medium"}>
 						Size: {Math.floor(size / 1024 / 10) / 100} MB
 					</Typography>
-					<Typography variant={"body2"} emphasis={"medium"}>
-						{progress < 1
-							? `Uploading: ${Math.round(progress * 100)}%`
-							: finished
-							? "Done!"
-							: "Processing..."}
-					</Typography>
+					{!error && (
+						<Typography variant={"body2"} emphasis={"medium"}>
+							{progress < 1
+								? `Uploading: ${Math.round(progress * 100)}%`
+								: finished
+								? "Done!"
+								: "Processing..."}
+						</Typography>
+					)}
+					{error && (
+						<Typography
+							variant={"body2"}
+							className={styles.tryAgain}
+							onClick={upload}
+						>
+							Error. Click here to try again.
+						</Typography>
+					)}
 				</div>
 			</div>
 		</Collapse>

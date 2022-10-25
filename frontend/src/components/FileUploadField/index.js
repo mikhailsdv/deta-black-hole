@@ -6,6 +6,9 @@ import DroppedFile from "../DroppedFile"
 
 import styles from "./index.module.scss"
 
+const getFileId = file =>
+	md5(`${file.name}${file.size}${file.lastModified}${new Date().valueOf()}`)
+
 const FileUploadField = props => {
 	const {
 		onChange: onChangeProp,
@@ -24,22 +27,10 @@ const FileUploadField = props => {
 	const onChange = useCallback(
 		e => {
 			const files = Array.from(e.target?.files || [])
-			files.forEach(
-				file =>
-					(file.id = md5(
-						`${file.name}${file.size}${file.lastModified}`
-					))
-			)
+			files.forEach(file => (file.id = getFileId(file)))
 			onChangeProp(files)
 		},
 		[onChangeProp]
-	)
-
-	const unmountFile = useCallback(
-		id => {
-			onChange(value.filter(file => file.id !== id))
-		},
-		[onChange, value]
 	)
 
 	useEffect(() => {
@@ -51,7 +42,6 @@ const FileUploadField = props => {
 			if (entered) return
 			entered = true
 			setShowFullScreenDrop(true)
-			console.log("onDragEnter")
 		}
 
 		const onDragLeave = e => {
@@ -68,6 +58,7 @@ const FileUploadField = props => {
 				if (data[i].kind === "file") {
 					const file = data[i].getAsFile()
 					if (/^image\/.+$/.test(file.type)) {
+						file.id = getFileId(file)
 						result.push(file)
 					}
 				}

@@ -1,4 +1,4 @@
-import React, {Suspense, useState, useEffect, useCallback} from "react"
+import React, {useState, useEffect, useCallback} from "react"
 import useApi from "../api/useApi"
 //import {useSnackbar} from "notistack"
 import UserContext from "../contexts/user"
@@ -13,7 +13,7 @@ import Link from "../components/Link"
 import Image from "../components/Image"
 import Button from "../components/Button"
 
-import logo from "../images/favicon-32x32.png"
+import logo from "../images/android-chrome-192x192.png"
 
 import styles from "./index.module.scss"
 
@@ -35,6 +35,10 @@ const App = () => {
 		props: photoDialogProps,
 		Component: PhotoDialog,
 	} = useDialog()
+
+	const onDropFiles = useCallback(files => {
+		setDroppedFiles(prev => prev.concat(files))
+	}, [])
 
 	const zoomPhoto = useCallback(
 		src => {
@@ -61,7 +65,7 @@ const App = () => {
 		let blockListener = false
 		let hasNext = true
 		let offset = 0
-		const limit = 8
+		const limit = 9
 
 		const onScroll = async force => {
 			const toBottom =
@@ -73,7 +77,7 @@ const App = () => {
 			) {
 				blockListener = true
 				if (offset > 0) setIsLoading(true)
-				const {count, items, next} = await getPhotos({limit: 9, offset})
+				const {count, items, next} = await getPhotos({limit, offset})
 				setIsLoading(false)
 				hasNext = next
 
@@ -157,7 +161,7 @@ const App = () => {
 				</Typography>
 				<br />
 				<FileUploadField
-					onChange={setDroppedFiles}
+					onChange={onDropFiles}
 					value={droppedFiles}
 					accept="image/*"
 					placeholder="Drop photos here"
