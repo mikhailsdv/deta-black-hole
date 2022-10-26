@@ -6,8 +6,6 @@ micros:
     src: ./frontend/
     engine: static
     primary: true
-    public_routes:
-      - "/api/photo/*"
     commands:
       - npm run build
     serve: build/
@@ -16,4 +14,6 @@ micros:
     src: ./backend/
     path: api
     engine: nodejs16
+    public_routes:
+      - "/photo/*"
     run: "node server.js"
