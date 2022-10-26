@@ -14,7 +14,7 @@ export default function Image(props) {
 	const onLoad = useCallback(
 		e => {
 			setLoaded(true)
-			onLoadProp(e.target)
+			onLoadProp && onLoadProp(e.target)
 		},
 		[onLoadProp]
 	)

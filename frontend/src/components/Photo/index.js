@@ -3,20 +3,27 @@ import classnames from "classnames"
 import urlJoin from "url-join"
 import {useSnackbar} from "notistack"
 import copy from "copy-to-clipboard"
+import UAParser from "ua-parser-js"
 import {
 	copyBlobToClipboard,
 	getBlobFromImageElement,
 } from "copy-image-clipboard"
 import {downloadFile} from "../../functions/utils"
+import useApi from "../../api/useApi"
 
 import Image from "../Image"
 import Card from "../Card"
 import Button from "../Button"
 import IconButton from "../IconButton"
+import Tooltip from "../Tooltip"
 import {FlatIcon} from "../FlatIcon"
 
 import styles from "./index.module.scss"
-import useApi from "../../api/useApi"
+
+const parser = new UAParser()
+const showCopyImageButton =
+	parser.getEngine().name === "Blink" ||
+	parser.getBrowser().name.includes("Chrome")
 
 export default function Photo(props) {
 	const {
@@ -97,7 +104,7 @@ export default function Photo(props) {
 			console.error(err.name, err.message)
 			enqueueSnackbar({
 				variant: "error",
-				message: "Can't copy to clipboard.",
+				message: "Can't copy to clipboard",
 			})
 			setLoadingCopyImage(false)
 		}
@@ -109,7 +116,7 @@ export default function Photo(props) {
 				clickTimer.current = setTimeout(() => {
 					enqueueSnackbar({
 						variant: "warning",
-						message: "Double-click to delete this photo.",
+						message: "Double-click to delete this photo",
 					})
 				}, 300)
 			}
@@ -161,17 +168,23 @@ export default function Photo(props) {
 				Download
 			</Button>
 			<div className={styles.actions}>
-				<IconButton
-					variant={"secondary"}
-					small
-					isLoading={loadingCopyImage}
-					onClick={copyImage}
-				>
-					<FlatIcon name={"fi-br-copy-alt"} />
-				</IconButton>
-				<IconButton variant={"secondary"} small onClick={copyUrl}>
-					<FlatIcon name={"fi-br-share"} />
-				</IconButton>
+				{showCopyImageButton && (
+					<Tooltip title={"Copy image to clipboard"}>
+						<IconButton
+							variant={"secondary"}
+							small
+							isLoading={loadingCopyImage}
+							onClick={copyImage}
+						>
+							<FlatIcon name={"fi-br-copy-alt"} />
+						</IconButton>
+					</Tooltip>
+				)}
+				<Tooltip title={"Copy direct link to image"}>
+					<IconButton variant={"secondary"} small onClick={copyUrl}>
+						<FlatIcon name={"fi-br-share"} />
+					</IconButton>
+				</Tooltip>
 				<IconButton
 					variant={"secondary"}
 					small

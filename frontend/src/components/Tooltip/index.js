@@ -9,10 +9,10 @@ const Tooltip_ = props => {
 		<Tooltip
 			arrow
 			placement="top"
-			enterDelay={300}
+			enterDelay={1200}
 			enterNextDelay={300}
-			enterTouchDelay={0}
-			leaveTouchDelay={12000}
+			enterTouchDelay={300}
+			leaveTouchDelay={3000}
 			classes={{
 				tooltip: styles.root,
 				arrow: styles.arrow,

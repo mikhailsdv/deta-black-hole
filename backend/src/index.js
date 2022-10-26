@@ -1,4 +1,5 @@
 const {DETA_PROJECT_KEY} = require('./env')
+const mime = require('mime');
 const express = require("express")
 const fileUpload = require("express-fileupload");
 const expressApp = express()
@@ -48,6 +49,7 @@ expressApp.get("/photo/:drive_name", async (req, res) => {
 		res.status(404).json({error: "Photo not found"})
 		return
 	}
+	res.set("Content-Type", mime.getType(req.params.drive_name))
 	res.send(photo)
 })
 

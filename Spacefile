@@ -1,10 +1,13 @@
 # Spacefile Docs: https://go.deta.dev/docs/spacefile/v0
 v: 0
+icon: ./icon.png
 micros:
   - name: black-hole-frontend
     src: ./frontend/
     engine: static
     primary: true
+    public_routes:
+      - "/api/photo/*"
     commands:
       - npm run build
     serve: build/

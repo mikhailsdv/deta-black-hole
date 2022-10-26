@@ -24,9 +24,9 @@ const SnackbarMessage = forwardRef((props, ref) => {
 		variant &&
 		{
 			success: createFlatIcon("fi-br-check"),
-			default: createFlatIcon("fi-br-bell-ring"),
+			default: createFlatIcon("fi-br-comment"),
 			error: createFlatIcon("fi-br-exclamation"),
-			warning: createFlatIcon("fi-br-whistle"),
+			warning: createFlatIcon("fi-br-exclamation"),
 		}[variant]
 
 	return (

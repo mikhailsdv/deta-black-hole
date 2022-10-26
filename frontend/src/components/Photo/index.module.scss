@@ -3,6 +3,7 @@
 .root {
 	position: relative;
 	padding: 8px;
+	border-radius: 12px;
 
 	.imageWrapper {
 		position: relative;
@@ -23,7 +24,7 @@
 	}
 
 	.download {
-		margin-top: 6px;
+		margin-top: 8px;
 	}
 
 	.actions {
