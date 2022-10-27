@@ -116,6 +116,31 @@ const App = () => {
 		return () => window.removeEventListener("scroll", onScroll)
 	}, [getPhotos])
 
+	/*useEffect(() => {
+		let timeout
+		;(async function load() {
+			try {
+				const {count, items} = await getPhotos({limit: 9, offset: 0})
+				setPhotos(prev => {
+					return prev.concat(
+						items.filter(
+							item =>
+								!prev.some(
+									prevItem => prevItem.key === item.key
+								)
+						)
+					)
+				})
+				setTotal(count)
+			} catch (err) {
+				console.error(err)
+			}
+			setTimeout(load, 4000)
+		})()
+
+		return () => clearTimeout(timeout)
+	}, [])*/
+
 	return (
 		/*<UserContext.Provider
 			value={{

@@ -25,7 +25,6 @@ const FileUploadField = props => {
 	} = props
 
 	const {enqueueSnackbar} = useSnackbar()
-	const {download} = useApi()
 
 	const [showFullScreenDrop, setShowFullScreenDrop] = useState(false)
 	const fullScreenDropRef = useRef(null)
@@ -50,30 +49,12 @@ const FileUploadField = props => {
 		const fullScreenDropEl = fullScreenDropRef.current
 		let entered = false
 
-		const onDragEnter = e => {
-			e.preventDefault()
-			if (entered) return
-			entered = true
-			setShowFullScreenDrop(true)
-		}
-
-		const onDragLeave = e => {
-			e.preventDefault()
-			entered = false
-			setShowFullScreenDrop(false)
-		}
-
-		const onDrop = e => {
-			onDragLeave(e)
+		const processItems = items => {
 			const result = []
-			const data = e.dataTransfer.items
-
 			let isHtml = false
-			for (let i = 0; i < data.length; i += 1) {
-				const item = data[i]
-
+			for (let i = 0; i < items.length; i += 1) {
+				const item = items[i]
 				if (item.kind === "string" && item.type === "text/html") {
-					console.log(123)
 					isHtml = true
 					item.getAsString(async htmlString => {
 						try {
@@ -82,7 +63,8 @@ const FileUploadField = props => {
 								"text/html"
 							)
 							const src =
-								htmlDOM.getElementsByTagName("img")[0].src
+								htmlDOM.getElementsByTagName("img")[0]?.src ||
+								htmlDOM.getElementsByTagName("a")[0]?.href
 							onChangeProp({
 								type: "url",
 								data: src,
@@ -110,6 +92,31 @@ const FileUploadField = props => {
 			if (result.length) onChangeProp(result)
 		}
 
+		const onDragEnter = e => {
+			e.preventDefault()
+			if (entered) return
+			entered = true
+			setShowFullScreenDrop(true)
+		}
+
+		const onDragLeave = e => {
+			e.preventDefault()
+			entered = false
+			setShowFullScreenDrop(false)
+		}
+
+		const onDrop = e => {
+			onDragLeave(e)
+			processItems(e.dataTransfer.items)
+		}
+
+		const onPaste = e => {
+			const items = (e.clipboardData || e.originalEvent.clipboardData)
+				.items
+			processItems(items)
+		}
+
+		document.addEventListener("paste", onPaste)
 		window.addEventListener("dragover", onDragEnter)
 		//window.addEventListener("drop", onDrop)
 		//window.addEventListener("dragend", onDragLeave)
@@ -118,6 +125,7 @@ const FileUploadField = props => {
 		fullScreenDropEl.addEventListener("drop", onDrop)
 
 		return () => {
+			document.removeEventListener("paste", onPaste)
 			window.removeEventListener("dragover", onDragEnter)
 			//window.removeEventListener("drop", onDrop)
 			//window.removeEventListener("dragend", onDragLeave)
@@ -125,7 +133,7 @@ const FileUploadField = props => {
 			fullScreenDropEl.removeEventListener("dragend", onDragLeave)
 			fullScreenDropEl.removeEventListener("drop", onDrop)
 		}
-	}, [onChangeProp, enqueueSnackbar, download])
+	}, [onChangeProp, enqueueSnackbar])
 
 	return (
 		<div className={classnames(styles.root, className, classes.root)}>
