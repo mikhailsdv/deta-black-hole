@@ -168,8 +168,11 @@ const App = () => {
 						Author
 					</Link>{" "}
 					/{" "}
-					<Link to={"https://cv.mishasaidov.com"} underline={"hover"}>
-						CV
+					<Link
+						to={"https://articles.mishasaidov.com/projects"}
+						underline={"hover"}
+					>
+						Projects
 					</Link>
 				</Typography>
 				<br />
