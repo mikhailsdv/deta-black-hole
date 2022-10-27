@@ -63,10 +63,4 @@ const getFileFromImageUrl = url =>
 		})
 	})
 
-module.exports = {
-	pluralize,
-	sleep,
-	numberWithSpaces,
-	downloadFile,
-	getFileFromImageUrl,
-}
+export {pluralize, sleep, numberWithSpaces, downloadFile, getFileFromImageUrl}
