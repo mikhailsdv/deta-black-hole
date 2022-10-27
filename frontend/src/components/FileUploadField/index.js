@@ -33,8 +33,15 @@ const FileUploadField = props => {
 	const onChange = useCallback(
 		e => {
 			const files = Array.from(e.target?.files || [])
-			files.forEach(file => (file.id = getFileId(file)))
-			onChangeProp(files)
+			onChangeProp(
+				files.map(file => {
+					file.id = getFileId(file)
+					return {
+						type: "file",
+						data: file,
+					}
+				})
+			)
 		},
 		[onChangeProp]
 	)
@@ -66,6 +73,7 @@ const FileUploadField = props => {
 				const item = data[i]
 
 				if (item.kind === "string" && item.type === "text/html") {
+					console.log(123)
 					isHtml = true
 					item.getAsString(async htmlString => {
 						try {

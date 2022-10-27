@@ -64,6 +64,7 @@
 		opacity: .7;
 		text-decoration: underline;
 		cursor: pointer;
+		flex-grow: unset!important;
 	}
 
 	& > *:first-child {
