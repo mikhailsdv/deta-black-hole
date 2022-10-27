@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography"
 import styles from "./index.module.scss"
 
 export default function _Typography(props) {
-	const {emphasis = "high", className, classes = {}, ...rest} = props
+	const {emphasis = "high", className, ...rest} = props
 
 	return (
 		<Typography
