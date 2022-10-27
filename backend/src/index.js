@@ -1,23 +1,24 @@
-const {DETA_PROJECT_KEY} = require('./env')
-const mime = require('mime');
+const {DETA_PROJECT_KEY} = require("./env")
+const mime = require("mime")
+const axios = require("axios")
 const express = require("express")
-const fileUpload = require("express-fileupload");
+const fileUpload = require("express-fileupload")
 const expressApp = express()
 const {savePhotos, savePhoto, getPhotos, getPhoto, deletePhoto, getPhotoFromBase} = require("./db")
 
 expressApp.use(express.json())
-expressApp.use(fileUpload());
+expressApp.use(fileUpload())
 
 expressApp.get("/", (req, res) => {
 	res.send("Hello World!")
 })
 
 expressApp.use((req, res, next) => {
-	res.append('Access-Control-Allow-Origin', '*');
-	res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-	res.append('Access-Control-Allow-Headers', '*');
-	next();
-});
+	res.append("Access-Control-Allow-Origin", "*")
+	res.append("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE")
+	res.append("Access-Control-Allow-Headers", "*")
+	next()
+})
 
 expressApp.post("/photos", async (req, res) => {
 	let photos = req.files["photos[]"]
@@ -60,6 +61,28 @@ expressApp.get("/key/:key", async (req, res) => {
 		return
 	}
 	res.send(photo)
+})
+
+expressApp.post("/download", async (req, res) => {
+	try {
+		const response = await axios({
+			url: req.body.url,
+			responseType: "arraybuffer",
+			headers: {
+				"user-agent": req.headers["user-agent"],
+			},
+		})
+		const type = req.body.url.match(/^data:(.+?);/)?.[1] || response.headers['content-type'] || "image/jpeg"
+		const photo = await savePhoto({
+			name: `download.${mime.getExtension(type)}`,
+			size: response.data.length,
+			data: response.data,
+		})
+		res.json(photo)
+	} catch (err) {
+		console.error(err)
+		res.status(400).json({error: "Can't download photo"})
+	}
 })
 
 module.exports = expressApp

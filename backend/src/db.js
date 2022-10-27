@@ -86,8 +86,12 @@ const deletePhoto = async ({key}) => {
 	try {
 		const photo = await db.get(key)
 		if (!photo) return true
-		await drive.delete(photo.drive_name)
 		await db.delete(key)
+		try {
+			await drive.delete(photo.drive_name)
+		} catch (err) {
+			console.error(err)
+		}
 		return true
 	} catch (err) {
 		console.error(err)
