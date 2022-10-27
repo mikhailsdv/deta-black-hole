@@ -9,16 +9,16 @@
 	width: 100%;
 	vertical-align: top;
 	border-radius: 10px;
-	box-shadow: inset 0 0 0 1px $emphasis-outlined;
+	box-shadow: inset 0 0 0 3px $block-placeholder-color;
 	overflow: hidden;
 	display: flex;
 	align-items: center;
 	transition: $transition;
 	&[data-focused="true"] {
-		box-shadow: inset 0 0 0 2px $accent-color;
+		box-shadow: inset 0 0 0 3px $accent-color;
 	}
 	&[data-error="true"] {
-		box-shadow: inset 0 0 0 2px $error-color;
+		box-shadow: inset 0 0 0 3px $error-color;
 	}
 
 	.icon {

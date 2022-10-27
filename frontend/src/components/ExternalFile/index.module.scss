@@ -1,0 +1,63 @@
+@import "../../styles/variables.scss";
+
+.root {
+	position: relative;
+	border-radius: 8px;
+	padding: 12px;
+	width: 100%;
+	display: flex;
+	background-color: $paper-color;
+	overflow: hidden;
+	transition: $transition;
+	&.fadeOut {
+		opacity: 0;
+	}
+	&.error {
+		background-color: fade-out($error-color, .7);
+
+		.progress {
+			opacity: 0;
+		}
+	}
+
+	.progress {
+		position: absolute;
+        top: 0;
+		left: 0;
+        height: 100%;
+        transition: $transition;
+		z-index: 1;
+		background-color: fade-out($accent-color, .7);
+
+		&.finished {
+			background-color: fade-out($positive-color, .7);
+		}
+	}
+
+	.image {
+		flex: none;
+		width: 80px;
+		height: 80px;
+        border-radius: 6px;
+		margin-right: 16px;
+		object-fit: cover;
+		object-position: center;
+		background-color: $block-placeholder-color;
+		z-index: 2;
+	}
+
+	.info {
+		z-index: 2;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		min-height: 80px;
+
+		.tryAgain {
+			color: $error-color;
+			text-decoration: underline;
+			cursor: pointer;
+			font-weight: 500;
+		}
+	}
+}

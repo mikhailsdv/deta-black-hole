@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useCallback} from "react"
 import useApi from "../api/useApi"
 //import {useSnackbar} from "notistack"
-import UserContext from "../contexts/user"
+//import UserContext from "../contexts/user"
 import useDialog from "../hooks/useDialog"
 
 import Container from "@mui/material/Container"
@@ -12,6 +12,7 @@ import FileUploadField from "../components/FileUploadField"
 import Link from "../components/Link"
 import Image from "../components/Image"
 import Button from "../components/Button"
+import TextField from "../components/TextField"
 
 import logo from "../images/android-chrome-192x192.png"
 
@@ -20,15 +21,17 @@ import styles from "./index.module.scss"
 const App = () => {
 	const {getPhotos, getSinglePhoto} = useApi()
 
-	const [user, setUser] = useState({
+	/*const [user, setUser] = useState({
 		id: 1,
-	})
+	})*/
 	const [droppedFiles, setDroppedFiles] = useState([])
 	const [photos, setPhotos] = useState([])
 	const [total, setTotal] = useState(0)
 	const [deletedKeys, setDeletedKeys] = useState([])
 	const [dialogPhotoSrc, setDialogPhotoSrc] = useState("")
 	const [isLoading, setIsLoading] = useState(false)
+	const [link, setLink] = useState("")
+	const [showLink, setShowLink] = useState(false)
 	const {
 		open: openPhotoDialog,
 		close: closePhotoDialog,
@@ -60,6 +63,16 @@ const App = () => {
 		},
 		[getSinglePhoto]
 	)
+
+	const uploadLink = useCallback(() => {
+		setLink("")
+		onDropFiles([
+			{
+				type: "url",
+				data: link,
+			},
+		])
+	}, [link, onDropFiles])
 
 	useEffect(() => {
 		let blockListener = false
@@ -104,12 +117,12 @@ const App = () => {
 	}, [getPhotos])
 
 	return (
-		<UserContext.Provider
+		/*<UserContext.Provider
 			value={{
 				user,
 				setUser,
 			}}
-		>
+		>*/ <>
 			<PhotoDialog
 				{...photoDialogProps}
 				maxWidth={"sm"}
@@ -169,6 +182,34 @@ const App = () => {
 					onFinish={onFinish}
 				/>
 				<br />
+				<div className={styles.linkBlock}>
+					{!showLink && (
+						<Typography
+							variant={"subtitle2bold"}
+							className={styles.orText}
+							onClick={() => setShowLink(true)}
+						>
+							...or upload via URL
+						</Typography>
+					)}
+					{showLink && (
+						<>
+							<TextField
+								label="Paste an image URL"
+								value={link}
+								onChange={e => setLink(e.target.value)}
+							/>
+							<Button
+								variant="primary"
+								onClick={uploadLink}
+								disabled={!/^https?:\/\/.+/.test(link)}
+							>
+								Upload
+							</Button>
+						</>
+					)}
+				</div>
+				<br />
 				<br />
 				<Typography variant={"h4"} className={styles.mb6}>
 					Your photos
@@ -217,7 +258,8 @@ const App = () => {
 					</>
 				)}
 			</Container>
-		</UserContext.Provider>
+		</>
+		/*</UserContext.Provider>*/
 	)
 }
 

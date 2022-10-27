@@ -1,8 +1,11 @@
 import React, {useCallback, useEffect, useState, useRef} from "react"
 import classnames from "classnames"
 import md5 from "md5"
+import {useSnackbar} from "notistack"
+import useApi from "../../api/useApi"
 
 import DroppedFile from "../DroppedFile"
+import ExternalFile from "../ExternalFile"
 
 import styles from "./index.module.scss"
 
@@ -20,6 +23,9 @@ const FileUploadField = props => {
 		className,
 		classes = {},
 	} = props
+
+	const {enqueueSnackbar} = useSnackbar()
+	const {download} = useApi()
 
 	const [showFullScreenDrop, setShowFullScreenDrop] = useState(false)
 	const fullScreenDropRef = useRef(null)
@@ -54,15 +60,45 @@ const FileUploadField = props => {
 			onDragLeave(e)
 			const result = []
 			const data = e.dataTransfer.items
-			for (let i = 0; i < data.length; i++) {
-				if (data[i].kind === "file") {
-					const file = data[i].getAsFile()
+
+			let isHtml = false
+			for (let i = 0; i < data.length; i += 1) {
+				const item = data[i]
+
+				if (item.kind === "string" && item.type === "text/html") {
+					isHtml = true
+					item.getAsString(async htmlString => {
+						try {
+							const htmlDOM = new DOMParser().parseFromString(
+								htmlString,
+								"text/html"
+							)
+							const src =
+								htmlDOM.getElementsByTagName("img")[0].src
+							onChangeProp({
+								type: "url",
+								data: src,
+							})
+						} catch (err) {
+							enqueueSnackbar({
+								variant: "error",
+								message: "Couldn't read the dropped file",
+							})
+							console.error(err)
+						}
+					})
+				} else if (item.kind === "file" && !isHtml) {
+					const file = item.getAsFile()
 					if (/^image\/.+$/.test(file.type)) {
 						file.id = getFileId(file)
-						result.push(file)
+						result.push({
+							type: "file",
+							data: file,
+						})
 					}
 				}
 			}
+
 			if (result.length) onChangeProp(result)
 		}
 
@@ -81,7 +117,7 @@ const FileUploadField = props => {
 			fullScreenDropEl.removeEventListener("dragend", onDragLeave)
 			fullScreenDropEl.removeEventListener("drop", onDrop)
 		}
-	}, [onChangeProp])
+	}, [onChangeProp, enqueueSnackbar, download])
 
 	return (
 		<div className={classnames(styles.root, className, classes.root)}>
@@ -97,14 +133,23 @@ const FileUploadField = props => {
 
 			<div className={styles.droppedFilesContainer}>
 				{value &&
-					value.map(file => (
-						<DroppedFile
-							key={file.id}
-							file={file}
-							className={styles.droppedFile}
-							onFinish={onFinish}
-						/>
-					))}
+					value.map(file =>
+						file.type === "file" ? (
+							<DroppedFile
+								key={file.data.id}
+								file={file.data}
+								className={styles.droppedFile}
+								onFinish={onFinish}
+							/>
+						) : (
+							<ExternalFile
+								key={file.data}
+								url={file.data}
+								className={styles.droppedFile}
+								onFinish={onFinish}
+							/>
+						)
+					)}
 			</div>
 			<div className={styles.dropArea}>
 				<input

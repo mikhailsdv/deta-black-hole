@@ -54,3 +54,19 @@
 		opacity: .8;
 	}
 }
+
+.linkBlock {
+	display: flex;
+	gap: 12px;
+	margin-top: 12px;
+
+	.orText {
+		opacity: .7;
+		text-decoration: underline;
+		cursor: pointer;
+	}
+
+	& > *:first-child {
+		flex-grow: 1;
+	}
+}

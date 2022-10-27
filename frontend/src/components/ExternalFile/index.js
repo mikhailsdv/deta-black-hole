@@ -1,22 +1,19 @@
-import React, {useState, useEffect, useCallback} from "react"
+import React, {useState, useRef, useEffect, useCallback} from "react"
 import classnames from "classnames"
 import useApi from "../../api/useApi"
 
 import Typography from "../Typography"
 import Collapse from "@mui/material/Collapse"
 
-import notFoundImage from "../../images/not-found.png"
-
 import styles from "./index.module.scss"
 
-export default function DroppedFile(props) {
-	const {onFinish, file, className, classes = {}} = props
-	const {name, size} = file
+export default function ExternalFile(props) {
+	const {onFinish, url, className, classes = {}} = props
 
-	const {uploadPhoto} = useApi()
+	const {download} = useApi()
+	const int = useRef(null)
 
 	const [progress, setProgress] = useState(0)
-	const [src, setSrc] = useState(notFoundImage)
 	const [error, setError] = useState(false)
 	const [finished, setFinished] = useState(false)
 	const [collapse, setCollapse] = useState(false)
@@ -24,23 +21,19 @@ export default function DroppedFile(props) {
 
 	const upload = useCallback(async () => {
 		setError(false)
-		setProgress(0.01)
-		const fileReader = new FileReader()
-		fileReader.readAsDataURL(file)
-		fileReader.addEventListener("load", fileReaderEvent => {
-			setSrc(fileReaderEvent.target.result)
-		})
+		clearInterval(int.current)
+		int.current = setInterval(() => {
+			setProgress(value => (value += (0.3 * (0.9 - value)) / 1))
+		}, 1000)
+
 		try {
-			const {key} = await uploadPhoto(
-				{photo: file},
-				{
-					onUploadProgress: ({progress}) => setProgress(progress),
-				}
-			)
+			const {key} = await download({url})
 			if (!key) {
 				setError(true)
 				return
 			}
+			clearInterval(int.current)
+			setProgress(1)
 			onFinish(key)
 			setFinished(true)
 			setTimeout(() => {
@@ -53,7 +46,7 @@ export default function DroppedFile(props) {
 			console.error(err)
 			setError(true)
 		}
-	}, [file, uploadPhoto, onFinish])
+	}, [url, download, onFinish])
 
 	useEffect(() => {
 		if (progress > 0) {
@@ -78,17 +71,17 @@ export default function DroppedFile(props) {
 						styles.progress,
 						progress === 1 && styles.finished
 					)}
-					style={{width: `${progress * 90 + (finished ? 10 : 0)}%`}}
+					style={{width: `${progress * 100}%`}}
 				/>
-				<img src={src} alt={""} className={styles.image} />
+				<img src={url} alt={""} className={styles.image} />
 				<div className={styles.info}>
 					<Typography variant={"subtitle1bold"} gutterBottom>
-						{name.length > 50
-							? `${name.substring(0, 47).trim()}...`
-							: name}
+						{url.length > 50
+							? `${url.substring(0, 47).trim()}...`
+							: url}
 					</Typography>
 					<Typography variant={"body2"} emphasis={"medium"}>
-						Size: {Math.floor(size / 1024 / 10) / 100} MB
+						External file
 					</Typography>
 					{!error && (
 						<Typography variant={"body2"} emphasis={"medium"}>

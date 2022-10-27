@@ -40,5 +40,12 @@
 		"name": "getSinglePhoto",
 		"url": "/key/{key}",
 		"method": "get"
+	},
+	{
+		"name": "download",
+		"url": "/download",
+		"method": "post",
+		"params": ["url"],
+		"timeout": 30000
 	}
 ]

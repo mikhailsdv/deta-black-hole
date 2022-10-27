@@ -1,5 +1,4 @@
-import React, {useCallback, useRef, useState} from "react"
-import {IMaskInput} from "react-imask"
+import React, {useCallback, useState} from "react"
 import classnames from "classnames"
 
 import TextField from "@mui/material/TextField"
@@ -28,27 +27,6 @@ const TextField_ = props => {
 		setIsFocused(false)
 	}, [])
 
-	const InputProps = useRef(
-		(() => {
-			const value = {classes: {root: styles.Input, input: styles.input}}
-			if (maskProps) {
-				value.inputComponent = props => {
-					const {inputRef, ...other} = props
-					return (
-						<IMaskInput
-							{...other}
-							{...maskProps}
-							inputRef={inputRef}
-							//onAccept={(value: any) => onChange({ target: { name: props.name, value } })}
-						/>
-					)
-				}
-			}
-			return value
-		})(),
-		[maskProps]
-	)
-
 	return (
 		<div className={styles.wrapper}>
 			<div
@@ -67,7 +45,9 @@ const TextField_ = props => {
 					variant="filled"
 					onFocus={onFocus}
 					onBlur={onBlur}
-					InputProps={InputProps.current}
+					InputProps={{
+						classes: {root: styles.Input, input: styles.input},
+					}}
 					InputLabelProps={{
 						classes: {
 							root: styles.label,

@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useCallback, useState} from "react"
-
 import classnames from "classnames"
+import notFoundImage from "../../images/not-found.png"
 import styles from "./index.module.scss"
 
 export default function Image(props) {
@@ -37,9 +37,7 @@ export default function Image(props) {
 		src ? setImageSrc(src) : setIsError(true)
 	}, [src])
 
-	const actualSrc = isError
-		? "https://metst.ru/saransk/upload/nofound.png"
-		: imageSrc
+	const actualSrc = isError ? notFoundImage : imageSrc
 
 	return (
 		<img
