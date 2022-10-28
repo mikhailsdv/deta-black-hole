@@ -21,6 +21,25 @@
 		width: 1em;
 		height: 1em;
 	}
+
+	.header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		@media screen and (max-width: $sm) {
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: flex-start;
+		}
+
+		& > *:last-child {
+			height: 20px;
+			@media screen and (max-width: $sm) {
+				margin-top: 6px;
+				margin-bottom: 12px;
+			}
+		}
+	}
 }
 
 .imageWrapper {

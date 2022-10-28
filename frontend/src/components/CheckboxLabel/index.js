@@ -16,6 +16,7 @@ export default function CheckboxLabel(props) {
 			label={label}
 			onChange={(_, value) => onChange(value)}
 			className={classnames(className, styles.root)}
+			{...rest}
 		/>
 	)
 }

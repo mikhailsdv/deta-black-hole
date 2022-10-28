@@ -13,6 +13,7 @@ import Link from "../components/Link"
 import Image from "../components/Image"
 import Button from "../components/Button"
 import TextField from "../components/TextField"
+import GitHubButton from "react-github-btn"
 
 import logo from "../images/android-chrome-192x192.png"
 
@@ -169,10 +170,22 @@ const App = () => {
 			</PhotoDialog>
 
 			<Container maxWidth="md" className={styles.container}>
-				<Typography variant={"h4"} className={styles.mb6}>
-					<img src={logo} alt={"logo"} className={styles.logo} />
-					Deta Black Hole
-				</Typography>
+				<div className={styles.header}>
+					<Typography variant={"h4"} className={styles.mb6}>
+						<img src={logo} alt={"logo"} className={styles.logo} />
+						Deta Black Hole
+					</Typography>
+					<GitHubButton
+						href="https://github.com/mikhailsdv/deta-black-hole"
+						data-color-scheme="no-preference: light; light: light; dark: light;"
+						data-icon="octicon-star"
+						data-size="small"
+						data-show-count="true"
+						aria-label="Star mikhailsdv/deta-black-hole on GitHub"
+					>
+						Star
+					</GitHubButton>
+				</div>
 				<Typography
 					variant={"caption"}
 					emphasis={"outlined"}

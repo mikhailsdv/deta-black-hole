@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useState, useRef} from "react"
 import classnames from "classnames"
 import md5 from "md5"
 import {useSnackbar} from "notistack"
-import useApi from "../../api/useApi"
 
 import DroppedFile from "../DroppedFile"
 import ExternalFile from "../ExternalFile"
@@ -65,6 +64,7 @@ const FileUploadField = props => {
 							const src =
 								htmlDOM.getElementsByTagName("img")[0]?.src ||
 								htmlDOM.getElementsByTagName("a")[0]?.href
+							if (!src) return
 							onChangeProp({
 								type: "url",
 								data: src,
