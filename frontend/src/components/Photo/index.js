@@ -4,6 +4,7 @@ import urlJoin from "url-join"
 import {useSnackbar} from "notistack"
 import copy from "copy-to-clipboard"
 import UAParser from "ua-parser-js"
+import prettyBytes from "pretty-bytes"
 import {
 	copyBlobToClipboard,
 	getBlobFromImageElement,
@@ -29,10 +30,12 @@ export default function Photo(props) {
 	const {
 		id,
 		url,
+		thumbnail,
 		drive_name,
 		file_name,
 		iso_date,
 		size,
+		extension,
 		unix_date,
 		onDelete: onDeleteProp,
 		onZoom,
@@ -44,6 +47,11 @@ export default function Photo(props) {
 		() => urlJoin(process.env.REACT_APP_API_BASE_URL, url),
 		[url]
 	)
+	const thumbnailSrc = useMemo(
+		() => urlJoin(process.env.REACT_APP_API_BASE_URL, thumbnail),
+		[thumbnail]
+	)
+	useMemo(() => `thumbnail_${src}`, [src])
 	const {enqueueSnackbar} = useSnackbar()
 	const {deletePhoto} = useApi()
 
@@ -82,33 +90,38 @@ export default function Photo(props) {
 
 	const copyImage = useCallback(async () => {
 		try {
-			if (!imgRef.current) {
-				return enqueueSnackbar({
-					variant: "warning",
-					message: "Photo isn't loaded yet. Please, wait...",
-				})
-			}
-			let clonedImage = imgRef.current.cloneNode(true)
-			clonedImage.classList.remove(...Array.from(clonedImage.classList))
 			setLoadingCopyImage(true)
-			const blob = await getBlobFromImageElement(clonedImage)
-			await copyBlobToClipboard(blob)
-			clonedImage.remove()
-			clonedImage = null
-			enqueueSnackbar({
-				variant: "success",
-				message: "Image copied to clipboard!",
+			let img = document.createElement("img")
+			img.crossOrigin = "anonymous"
+			img.src = src
+			img.addEventListener("load", async () => {
+				const blob = await getBlobFromImageElement(img)
+				await copyBlobToClipboard(blob)
+				img.remove()
+				img = null
+				enqueueSnackbar({
+					variant: "success",
+					message: "Image copied to clipboard!",
+				})
+				setLoadingCopyImage(false)
 			})
-			setLoadingCopyImage(false)
+			img.addEventListener("error", e => {
+				console.error(e)
+				enqueueSnackbar({
+					variant: "error",
+					message: "Can't copy to clipboard. Try again.",
+				})
+				setLoadingCopyImage(false)
+			})
 		} catch (err) {
 			console.error(err.name, err.message)
 			enqueueSnackbar({
 				variant: "error",
-				message: "Can't copy to clipboard",
+				message: "Can't copy to clipboard. Try again.",
 			})
 			setLoadingCopyImage(false)
 		}
-	}, [enqueueSnackbar])
+	}, [enqueueSnackbar, src])
 
 	const confirmDelete = useCallback(
 		e => {
@@ -151,11 +164,15 @@ export default function Photo(props) {
 		<Card className={classnames(styles.root, className)} {...rest}>
 			<div className={styles.imageWrapper}>
 				<Image
-					src={src}
+					src={thumbnailSrc}
 					className={styles.image}
 					onClick={() => onZoom(src)}
 					onLoad={onLoad}
 				/>
+				<div className={styles.info}>
+					{extension.replace(".", "").toUpperCase()}{" "}
+					{prettyBytes(size).toUpperCase()}
+				</div>
 			</div>
 
 			<Button

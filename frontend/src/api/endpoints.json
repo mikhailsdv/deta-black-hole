@@ -1,15 +1,5 @@
 [
 	{
-		"name": "uploadPhotos",
-		"url": "/photos",
-		"method": "post",
-		"params": ["photos"],
-		"headers": {
-			"Content-Type": "multipart/form-data"
-		},
-		"timeout": 0
-	},
-	{
 		"name": "uploadPhoto",
 		"url": "/photo",
 		"method": "post",

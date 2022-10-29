@@ -40,6 +40,48 @@
 			}
 		}
 	}
+
+	.linkBlock {
+		display: flex;
+		gap: 12px;
+		margin-top: 12px;
+
+		.orText {
+			opacity: .7;
+			text-decoration: underline;
+			cursor: pointer;
+			flex-grow: unset!important;
+		}
+
+		& > *:first-child {
+			flex-grow: 1;
+		}
+	}
+
+	.libraryHeader {
+		display: flex;
+		justify-content: space-between;
+		gap: 16px;
+		align-items: center;
+		@media screen and (max-width: $sm) {
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: flex-start;
+		}
+
+		.left {
+			display: flex;
+			flex-direction: column;
+			justify-content: unset;
+			align-items: unset;
+		}
+
+		.right {
+			width: 100%;
+			max-width: 250px;
+			flex: none;
+		}
+	}
 }
 
 .imageWrapper {
@@ -50,14 +92,15 @@
 	border-radius: 8px;
 	overflow: hidden;
 
-	.image {
+	.progress {
 		position: absolute;
 		top: 0;
 		left: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: contain;
-		z-index: 2;
+		right: 0;
+		bottom: 0;
+		margin: auto;
+		color:$paper-color;
+		z-index: 1;
 	}
 
 	.blur {
@@ -68,25 +111,20 @@
 		width: 120%;
 		height: 120%;
 		object-fit: cover;
-        z-index: 1;
+        z-index: 2;
 		filter: blur(12px);
+		background-color: transparent;
 		opacity: .8;
 	}
-}
 
-.linkBlock {
-	display: flex;
-	gap: 12px;
-	margin-top: 12px;
-
-	.orText {
-		opacity: .7;
-		text-decoration: underline;
-		cursor: pointer;
-		flex-grow: unset!important;
-	}
-
-	& > *:first-child {
-		flex-grow: 1;
+	.image {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		background-color: transparent;
+		z-index: 3;
 	}
 }

@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useCallback} from "react"
 import classnames from "classnames"
 import useApi from "../../api/useApi"
+import prettyBytes from "pretty-bytes"
 
 import Typography from "../Typography"
 import Collapse from "@mui/material/Collapse"
@@ -88,7 +89,7 @@ export default function DroppedFile(props) {
 							: name}
 					</Typography>
 					<Typography variant={"body2"} emphasis={"medium"}>
-						Size: {Math.floor(size / 1024 / 10) / 100} MB
+						Size: {prettyBytes(size).toUpperCase()}
 					</Typography>
 					{!error && (
 						<Typography variant={"body2"} emphasis={"medium"}>

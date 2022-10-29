@@ -13,11 +13,13 @@ import Link from "../components/Link"
 import Image from "../components/Image"
 import Button from "../components/Button"
 import TextField from "../components/TextField"
+import AvailableSpace from "../components/AvailableSpace"
 import GitHubButton from "react-github-btn"
 
 import logo from "../images/android-chrome-192x192.png"
 
 import styles from "./index.module.scss"
+import CircularProgress from "@mui/material/CircularProgress"
 
 const App = () => {
 	const {getPhotos, getSinglePhoto} = useApi()
@@ -33,6 +35,7 @@ const App = () => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [link, setLink] = useState("")
 	const [showLink, setShowLink] = useState(false)
+	const [takenStorage, setTakenStorage] = useState(0)
 	const {
 		open: openPhotoDialog,
 		close: closePhotoDialog,
@@ -42,6 +45,7 @@ const App = () => {
 
 	const onDropFiles = useCallback(files => {
 		setDroppedFiles(prev => prev.concat(files))
+		window.scrollTo({top: 0, behavior: "smooth"})
 	}, [])
 
 	const zoomPhoto = useCallback(
@@ -79,7 +83,7 @@ const App = () => {
 		let blockListener = false
 		let hasNext = true
 		let offset = 0
-		const limit = 9
+		const limit = 30
 
 		const onScroll = async force => {
 			const toBottom =
@@ -91,8 +95,13 @@ const App = () => {
 			) {
 				blockListener = true
 				if (offset > 0) setIsLoading(true)
-				const {count, items, next} = await getPhotos({limit, offset})
+				const {count, items, next, size} = await getPhotos({
+					limit,
+					offset,
+				})
 				setIsLoading(false)
+				if (!items) return
+				setTakenStorage(size)
 				hasNext = next
 
 				setPhotos(prev => {
@@ -117,30 +126,21 @@ const App = () => {
 		return () => window.removeEventListener("scroll", onScroll)
 	}, [getPhotos])
 
-	/*useEffect(() => {
+	useEffect(() => {
 		let timeout
 		;(async function load() {
 			try {
-				const {count, items} = await getPhotos({limit: 9, offset: 0})
-				setPhotos(prev => {
-					return prev.concat(
-						items.filter(
-							item =>
-								!prev.some(
-									prevItem => prevItem.key === item.key
-								)
-						)
-					)
-				})
+				const {count, size} = await getPhotos({limit: 0, offset: 0})
+				setTakenStorage(size)
 				setTotal(count)
 			} catch (err) {
 				console.error(err)
 			}
-			setTimeout(load, 4000)
+			setTimeout(load, 5000)
 		})()
 
 		return () => clearTimeout(timeout)
-	}, [])*/
+	}, [getPhotos])
 
 	return (
 		/*<UserContext.Provider
@@ -164,6 +164,10 @@ const App = () => {
 				]}
 			>
 				<div className={styles.imageWrapper}>
+					<CircularProgress
+						thickness={4}
+						className={styles.progress}
+					/>
 					<Image src={dialogPhotoSrc} className={styles.image} />
 					<Image src={dialogPhotoSrc} className={styles.blur} />
 				</div>
@@ -252,20 +256,30 @@ const App = () => {
 				</div>
 				<br />
 				<br />
-				<Typography variant={"h4"} className={styles.mb6}>
-					Your photos
-				</Typography>
-				{total > 0 && (
-					<Typography variant={"body1"} emphasis={"medium"}>
-						There {total === 1 ? "is" : "are"} {total}{" "}
-						{total === 1 ? "photo" : "photos"} in your black hole
-					</Typography>
-				)}
-				{total === 0 && (
-					<Typography variant={"body1"} emphasis={"medium"}>
-						Your black hole is empty. Let's drop some photos in it!
-					</Typography>
-				)}
+
+				<div className={styles.libraryHeader}>
+					<div className={styles.left}>
+						<Typography variant={"h4"} className={styles.mb6}>
+							Your photos
+						</Typography>
+						{total > 0 && (
+							<Typography variant={"body1"} emphasis={"medium"}>
+								There {total === 1 ? "is" : "are"} {total}{" "}
+								{total === 1 ? "photo" : "photos"} in your black
+								hole
+							</Typography>
+						)}
+						{total === 0 && (
+							<Typography variant={"body1"} emphasis={"medium"}>
+								Your black hole is empty. Let's drop some photos
+								in it!
+							</Typography>
+						)}
+					</div>
+					<div className={styles.right}>
+						<AvailableSpace taken={takenStorage} />
+					</div>
+				</div>
 				<br />
 				<Grid container spacing={2}>
 					{photos.map(photo =>
