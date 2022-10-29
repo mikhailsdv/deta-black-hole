@@ -14,6 +14,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-fileupload": "^1.4.0",
-    "mime": "^3.0.0"
+    "mime": "^3.0.0",
+    "sharp": "^0.31.1"
   }
 }

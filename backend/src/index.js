@@ -4,7 +4,7 @@ const axios = require("axios")
 const express = require("express")
 const fileUpload = require("express-fileupload")
 const expressApp = express()
-const {savePhotos, savePhoto, getPhotos, getPhoto, deletePhoto, getPhotoFromBase} = require("./db")
+const {savePhoto, getPhotos, getPhoto, deletePhoto, getPhotoFromBase} = require("./db")
 
 expressApp.use(express.json())
 expressApp.use(fileUpload())
@@ -18,15 +18,6 @@ expressApp.use((req, res, next) => {
 	res.append("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE")
 	res.append("Access-Control-Allow-Headers", "*")
 	next()
-})
-
-expressApp.post("/photos", async (req, res) => {
-	let photos = req.files["photos[]"]
-	if (!Array.isArray(photos)) {
-		photos = [photos]
-	}
-	const items = await savePhotos(photos)
-	res.json({items, count: items.length})
 })
 
 expressApp.get("/photos", async (req, res) => {
