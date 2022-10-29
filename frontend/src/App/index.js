@@ -126,7 +126,7 @@ const App = () => {
 		return () => window.removeEventListener("scroll", onScroll)
 	}, [getPhotos])
 
-	useEffect(() => {
+	/*useEffect(() => {
 		let timeout
 		;(async function load() {
 			try {
@@ -140,7 +140,19 @@ const App = () => {
 		})()
 
 		return () => clearTimeout(timeout)
-	}, [getPhotos])
+	}, [getPhotos])*/
+
+	useEffect(() => {
+		;(async function load() {
+			try {
+				const {count, size} = await getPhotos({limit: 0, offset: 0})
+				setTakenStorage(size)
+				setTotal(count)
+			} catch (err) {
+				console.error(err)
+			}
+		})()
+	}, [getPhotos, photos])
 
 	return (
 		/*<UserContext.Provider

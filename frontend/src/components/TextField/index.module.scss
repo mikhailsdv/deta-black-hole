@@ -14,10 +14,10 @@
 	display: flex;
 	align-items: center;
 	transition: $transition;
-	&[data-focused="true"] {
+	&.focused {
 		box-shadow: inset 0 0 0 3px $accent-color;
 	}
-	&[data-error="true"] {
+	&.error {
 		box-shadow: inset 0 0 0 3px $error-color;
 	}
 
@@ -31,10 +31,10 @@
 		transition: $transition;
 		z-index: 9;
 	}
-	&[data-focused="true"] .icon {
+	&.focused .icon {
 		color: $accent-color;
 	}
-	&[data-error="true"] .icon {
+	&.error .icon {
 		color: $error-color;
 	}
 }
@@ -51,7 +51,7 @@
 
 	.input {
 		background-color: transparent !important;
-		padding: 23px 16px 10px 16px;
+		padding: 22px 16px 9px 16px;
 
 		&:-internal-autofill-previewed,
 		&:-internal-autofill-selected,
@@ -87,7 +87,7 @@
 	transform: translate(16px, 17px) scale(1);
 }
 .labelShrink {
-	transform: translate(16px, 8px) scale(0.75);
+	transform: translate(16px, 8px) scale(0.65);
 }
 .labelDisabled {
 	opacity: 0.7;
@@ -96,7 +96,7 @@
 .helperText {
 	margin: 2px 0 0 0;
 	color: $emphasis-outlined;
-	&[data-error="true"] {
+	&.error {
 		color: $error-color;
 	}
 }
