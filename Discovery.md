@@ -1,6 +1,6 @@
 ---
 title: "Deta Black Hole"
-tagline: "Your personal image hosting."
+tagline: "Your personal image hosting"
 theme_color: "#ef39a8"
 git: "https://github.com/mikhailsdv/deta-black-hole"
 homepage: "https://github.com/mikhailsdv/deta-black-hole"
@@ -8,7 +8,9 @@ homepage: "https://github.com/mikhailsdv/deta-black-hole"
 
 🌀 Deta Black Hole is kind of black hole for your images. You just drop stuff and it eats it.
 
-Main features:
+![image](./preview.png)
+
+Features:
 
 -   Drag'n'drop multiple files;
 -   Drag'n'drop images from another browser tabs;
@@ -19,6 +21,7 @@ Main features:
 -   Delete image button;
 -   Adaptive mobile version;
 -   Your images sorted by upload date by default;
+-   Available space indicator;
 -   Other features I forgot about.
 
 So Deta Black Hole is the only black hole you'll be happy to see in Space 😎🚀
