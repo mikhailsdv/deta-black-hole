@@ -8,8 +8,6 @@ homepage: "https://github.com/mikhailsdv/deta-black-hole"
 
 🌀 Deta Black Hole is kind of black hole for your images. You just drop stuff and it eats it.
 
-![image](https://github.com/mikhailsdv/deta-black-hole/raw/main/preview.png)
-
 Features:
 
 -   Drag'n'drop multiple files;

@@ -43,6 +43,16 @@ const App = () => {
 		Component: PhotoDialog,
 	} = useDialog()
 
+	const updateLibraryInfo = useCallback(async () => {
+		try {
+			const {count, size} = await getPhotos({limit: 0, offset: 0})
+			setTakenStorage(size)
+			setTotal(count)
+		} catch (err) {
+			console.error(err)
+		}
+	}, [getPhotos])
+
 	const onDropFiles = useCallback(files => {
 		setDroppedFiles(prev => prev.concat(files))
 		window.scrollTo({top: 0, behavior: "smooth"})
@@ -62,11 +72,12 @@ const App = () => {
 				const photo = await getSinglePhoto({key})
 				setPhotos(prev => [photo, ...prev])
 				setTotal(prev => prev + 1)
+				await updateLibraryInfo()
 			} catch (err) {
 				console.error(err)
 			}
 		},
-		[getSinglePhoto]
+		[getSinglePhoto, updateLibraryInfo]
 	)
 
 	const uploadLink = useCallback(() => {
@@ -78,6 +89,15 @@ const App = () => {
 			},
 		])
 	}, [link, onDropFiles])
+
+	const onDeletePhoto = useCallback(
+		async key => {
+			setTotal(prev => prev - 1)
+			setDeletedKeys(prev => prev.concat(key))
+			await updateLibraryInfo()
+		},
+		[updateLibraryInfo]
+	)
 
 	useEffect(() => {
 		let blockListener = false
@@ -141,18 +161,6 @@ const App = () => {
 
 		return () => clearTimeout(timeout)
 	}, [getPhotos])*/
-
-	useEffect(() => {
-		;(async function load() {
-			try {
-				const {count, size} = await getPhotos({limit: 0, offset: 0})
-				setTakenStorage(size)
-				setTotal(count)
-			} catch (err) {
-				console.error(err)
-			}
-		})()
-	}, [getPhotos, photos])
 
 	return (
 		/*<UserContext.Provider
@@ -300,10 +308,7 @@ const App = () => {
 								<Photo
 									{...photo}
 									id={photo.key}
-									onDelete={key => {
-										setTotal(prev => prev - 1)
-										setDeletedKeys(prev => prev.concat(key))
-									}}
+									onDelete={onDeletePhoto}
 									onZoom={zoomPhoto}
 								/>
 							</Grid>
