@@ -16,4 +16,5 @@ micros:
     engine: nodejs16
     public_routes:
       - "/photo/*"
+      - "/wh/public/*"
     run: "node server.js"
