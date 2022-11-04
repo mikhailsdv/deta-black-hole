@@ -5,6 +5,11 @@ micros:
   - name: black-hole-frontend
     src: ./frontend/
     engine: static
+    public_routes:
+      - "/wh/public/*"
+      - "/static/*"
+      - "/api/photo/*"
+      - "/api/white-hole/public/*"
     primary: true
     commands:
       - npm run build
@@ -14,7 +19,4 @@ micros:
     src: ./backend/
     path: api
     engine: nodejs16
-    public_routes:
-      - "/photo/*"
-      - "/wh/public/*"
     run: "node server.js"

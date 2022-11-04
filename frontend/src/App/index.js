@@ -285,7 +285,30 @@ const App = () => {
 		setIsLoadingDelete(false)
 	}, [checkedImages, deletePhotos, enqueueSnackbar])
 
+	const copyWhiteHoleUrl = useCallback(() => {
+		copy(window.location.href.replace("private", "public"))
+
+		enqueueSnackbar({
+			variant: "success",
+			message: "White Hole public link copied to clipboard!",
+		})
+	}, [enqueueSnackbar])
+
+	const onDeleteWhiteHole = useCallback(
+		async key => {
+			setWhiteHoles(prev => prev.filter(items => items.key !== key))
+			navigate("/")
+			enqueueSnackbar({
+				variant: "success",
+				message: "White Hole has been deleted!",
+			})
+			await deleteWhiteHole({key})
+		},
+		[deleteWhiteHole, enqueueSnackbar, navigate]
+	)
+
 	useEffect(() => {
+		if (whiteHoleVisibility === "public") return
 		let blockListener = false
 		let hasNext = true
 		let offset = 0
@@ -330,31 +353,10 @@ const App = () => {
 		window.addEventListener("scroll", onScroll)
 
 		return () => window.removeEventListener("scroll", onScroll)
-	}, [getPhotos])
-
-	const copyWhiteHoleUrl = useCallback(() => {
-		copy(window.location.href.replace("private", "public"))
-
-		enqueueSnackbar({
-			variant: "success",
-			message: "White Hole public link copied to clipboard!",
-		})
-	}, [enqueueSnackbar])
-
-	const onDeleteWhiteHole = useCallback(
-		async key => {
-			setWhiteHoles(prev => prev.filter(items => items.key !== key))
-			navigate("/")
-			enqueueSnackbar({
-				variant: "success",
-				message: "White Hole has been deleted!",
-			})
-			await deleteWhiteHole({key})
-		},
-		[deleteWhiteHole, enqueueSnackbar, navigate]
-	)
+	}, [getPhotos, whiteHoleVisibility])
 
 	useEffect(() => {
+		if (whiteHoleVisibility === "public") return
 		;(async function loop({limit, offset}) {
 			const {count, items, next} = await getWhiteHoles({limit, offset})
 			setTotalWhiteHoles(count)
@@ -369,7 +371,7 @@ const App = () => {
 				await loop({limit, offset})
 			}
 		})({limit: 20, offset: 0})
-	}, [getWhiteHoles])
+	}, [getWhiteHoles, whiteHoleVisibility])
 
 	useEffect(() => {
 		if (whiteHoleVisibility !== "private") return
@@ -663,14 +665,32 @@ const App = () => {
 			<Container maxWidth="md" className={styles.container}>
 				<div className={styles.header}>
 					<Typography variant={"h4"} className={styles.mb6}>
-						<Link internal to={"/"} block>
-							<img
-								src={logo}
-								alt={"logo"}
-								className={styles.logo}
-							/>
-							Deta Black Hole
-						</Link>
+						{whiteHoleVisibility === "public" ? (
+							<Link
+								external
+								to={
+									"https://alpha.deta.space/discovery/@mikhailsdv/black_hole-3kf"
+								}
+								block
+								blank
+							>
+								<img
+									src={logo}
+									alt={"logo"}
+									className={styles.logo}
+								/>
+								Deta Black Hole
+							</Link>
+						) : (
+							<Link internal to={"/"} block>
+								<img
+									src={logo}
+									alt={"logo"}
+									className={styles.logo}
+								/>
+								Deta Black Hole
+							</Link>
+						)}
 					</Typography>
 					<GitHubButton
 						href="https://github.com/mikhailsdv/deta-black-hole"

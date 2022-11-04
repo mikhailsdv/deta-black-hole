@@ -81,7 +81,7 @@ export default function Photo(props) {
 		} else {
 			copy(
 				urlJoin(
-					window.location.href,
+					window.location.origin,
 					process.env.REACT_APP_API_BASE_URL,
 					url
 				)
