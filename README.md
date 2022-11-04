@@ -6,7 +6,7 @@ Your personal image hosting based on [Deta Space](https://deta.space/) 🚀
 
 ## Latest release
 
-[<img src="https://dev-bass-black_hole-3kf.mikhailsdv.deta.app/api/photo/nvi754j2xcs0.png" height="50"/>](https://alpha.deta.space/discovery/@mikhailsdv/black_hole-3kf)
+[<img src="https://user-images.githubusercontent.com/39059391/200036419-eb2984e1-8a15-4eac-ad5a-e8ab196caee4.png" height="50"/>](https://alpha.deta.space/discovery/@mikhailsdv/black_hole-3kf)
 
 ## Feedback
 
