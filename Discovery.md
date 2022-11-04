@@ -17,6 +17,8 @@ Features:
 -   Copy direct link to stored images;
 -   Load more while scrolling;
 -   Delete image button;
+-   Group photos into folders (White Holes);
+-   Share your White Holes;
 -   Adaptive mobile version;
 -   Your images sorted by upload date by default;
 -   Available space indicator;
