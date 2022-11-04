@@ -128,3 +128,100 @@
 		z-index: 3;
 	}
 }
+
+.bottomPanel {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	@media screen and (max-width: $md) {
+		flex-direction: column-reverse;
+		align-items: flex-start;
+		gap: 6px;
+	}
+
+	.actions {
+		display: flex;
+		gap: 12px;
+		@media screen and (max-width: $md) {
+			width: 100%;
+			flex-wrap: wrap;
+		}
+		@media screen and (max-width: $sm) {
+			gap: 6px;
+
+			button {
+				padding: 10px;
+				height: 30px;
+
+				span {
+					font-size: 14px;
+				}
+			}
+		}
+	}
+
+	.count {
+		margin-left: auto;
+		margin-right: 12px;
+		@media screen and (max-width: $md) {
+			margin-left: unset;
+		}
+	}
+}
+
+.whiteHoleDialog {
+	.whiteHoleDialogImages {
+	    display: flex;
+	    flex-wrap: wrap;
+	    background-color: $block-placeholder-color;
+	    border-radius: 12px;
+	    margin-top: 16px;
+		margin-bottom: 16px;
+		align-self: flex-start;
+
+	    .whiteHoleImageWrapper {
+	        position: relative;
+	        width: calc(100% / 8);
+	        padding-top: calc(100% / 8);
+
+	        img {
+	            position: absolute;
+	            top: 0;
+	            width: calc(100% - 12px);
+	            height: calc(100% - 12px);
+	            margin: 6px;
+	        }
+	    }
+	}
+
+	.visibility {
+	    display: flex;
+	    align-items: center;
+		cursor: pointer;
+		user-select: none;
+	}
+}
+
+.divider {
+	background-color: fade-out(white, .9);
+}
+
+.whiteHoleHeader {
+	display: flex;
+	gap: 24px;
+	width: 100%;
+	justify-content: space-between;
+	align-items: center;
+	@media screen and (max-width: $md) {
+		flex-direction: column;
+		gap: 12px;
+		justify-content: flex-start;
+		align-items: flex-start;
+	}
+
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+	}
+}

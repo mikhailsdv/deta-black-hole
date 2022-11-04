@@ -21,6 +21,8 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-github-btn": "^1.4.0",
+        "react-router-dom": "^6.4.3",
+        "react-router-scroll-to-top": "^1.2.0",
         "react-scripts": "5.0.1",
         "ua-parser-js": "^1.0.32",
         "url-join": "^5.0.0",
@@ -52,7 +54,7 @@
     },
     "devDependencies": {
         "autoprefixer": "^10.4.12",
-        "eslint": "^8.22.0",
+        "eslint": "8.22.0",
         "postcss": "^8.4.18",
         "prettier": "^2.7.1",
         "sass": "^1.55.0"

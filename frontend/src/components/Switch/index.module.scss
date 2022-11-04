@@ -11,17 +11,6 @@
 	height: $height + ($padding * 2);
 	padding: $padding;
 
-	&.unchecked:hover {
-		.track {
-			background-color: $emphasis-medium;
-		}
-	}
-	&.checked:hover {
-		.track {
-			background-color: $hover-color;
-		}
-	}
-
 	.track {
 		background-color: $block-placeholder-color;
 		opacity: 1;
@@ -38,7 +27,7 @@
 		.thumb {
 			width: $thumbSize;
 			height: $thumbSize;
-			box-shadow: 0px 2px 4px rgba(#00230b, 0.2);
+			box-shadow: 0 2px 4px rgba(#00230b, 0.2);
 		}
 	}
 

@@ -7,7 +7,8 @@ import CircularProgress from "@mui/material/CircularProgress"
 import styles from "./index.module.scss"
 
 const IconButton_ = forwardRef((props, ref) => {
-	const {children, small, variant, isLoading, className, ...rest} = props
+	const {children, small, variant, fullWidth, isLoading, className, ...rest} =
+		props
 
 	return (
 		<Button
@@ -16,6 +17,7 @@ const IconButton_ = forwardRef((props, ref) => {
 				styles.root,
 				className,
 				small && styles.small,
+				fullWidth && styles.fullWidth,
 				isLoading && styles.loading,
 				variant && styles[variant]
 			)}

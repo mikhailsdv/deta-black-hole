@@ -19,6 +19,9 @@
 		width: 44px;
 		min-width: 44px;
 	}
+	&.fullWidth {
+		width: 100%;
+	}
 
 	&.primary {
 		color: white;
@@ -43,6 +46,11 @@
 		&:not([disabled]):hover {
 			background-color: fade-out($accent-color, 0.8);
 		}
+	}
+
+	&.negative {
+		background-color: $error-color;
+		color: #ffffff;
 	}
 
 	&.loading {

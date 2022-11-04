@@ -1,13 +1,16 @@
 import React from "react"
+import {Link} from "react-router-dom"
 import classnames from "classnames"
 
 import styles from "./index.module.scss"
 
-export default function Link(props) {
+const Link_ = props => {
 	const {
 		block,
+		external,
+		internal,
 		to,
-		targetBlank = true,
+		blank,
 		underline,
 		children,
 		className,
@@ -16,18 +19,31 @@ export default function Link(props) {
 
 	const aProps = {
 		//fixes warning
-		target: targetBlank ? "_blank" : "_self",
-		rel: targetBlank ? "noreferrer noopener" : "",
+		target: blank ? "_blank" : "_self",
+		rel: blank ? "noreferrer noopener" : "",
 	}
 
-	return (
-		<a
-			href={to}
+	return internal ? (
+		<Link
+			to={to}
+			data-underline={underline}
 			className={classnames(
 				styles.root,
 				className,
-				block && styles.block,
-				underline && styles[`underline-${underline}`]
+				block && styles.block
+			)}
+			{...rest}
+		>
+			{children}
+		</Link>
+	) : (
+		<a
+			href={to}
+			data-underline={underline}
+			className={classnames(
+				styles.root,
+				className,
+				block && styles.block
 			)}
 			{...aProps}
 			{...rest}
@@ -36,3 +52,5 @@ export default function Link(props) {
 		</a>
 	)
 }
+
+export default Link_

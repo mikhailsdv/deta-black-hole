@@ -40,6 +40,34 @@
 				opacity:1;
 			}
 		}
+
+		.checkbox {
+			position: absolute;
+			top: 4px;
+			left: 4px;
+			width: 24px;
+			height: 24px;
+			border-radius: 8px;
+			font-size: 14px;
+			background-color: fade-out($accent-color, 0.9);
+			border: 2px solid fade-out($accent-color, 0.4);
+			cursor: pointer;
+			color: transparent;
+			z-index: 1;
+			transition: $transition;
+			overflow: hidden;
+			&.checked {
+				background-color: $accent-color;
+				color: white;
+			}
+
+			i {
+				display: block;
+				text-align: center;
+				width: 20px;
+				height: 20px;
+			}
+		}
 	}
 
 	.download {

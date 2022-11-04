@@ -1,5 +1,7 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
+import {BrowserRouter} from "react-router-dom"
+import {ScrollToTop} from "react-router-scroll-to-top"
 import CssBaseline from "@mui/material/CssBaseline"
 import {ThemeProvider} from "@mui/material/styles"
 import {createTheme, StyledEngineProvider} from "@mui/material/styles"
@@ -17,7 +19,7 @@ const theme = createTheme({
 		},
 	},
 	shape: {
-		borderRadius: 8,
+		borderRadius: 12,
 	},
 	typography: {
 		fontSize: 14,
@@ -103,12 +105,16 @@ const theme = createTheme({
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<ThemeProvider theme={theme}>
-		<StyledEngineProvider injectFirst>
-			<SnackbarProvider>
-				<CssBaseline />
-				<App />
-			</SnackbarProvider>
-		</StyledEngineProvider>
+		<BrowserRouter>
+			<ScrollToTop>
+				<StyledEngineProvider injectFirst>
+					<SnackbarProvider>
+						<CssBaseline />
+						<App />
+					</SnackbarProvider>
+				</StyledEngineProvider>
+			</ScrollToTop>
+		</BrowserRouter>
 	</ThemeProvider>
 )
 

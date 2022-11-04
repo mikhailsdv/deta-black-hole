@@ -7,18 +7,13 @@ import Switch from "@mui/material/Switch"
 import styles from "./index.module.scss"
 
 const Switch_ = props => {
-	const {checked, className, classes = {}, ...rest} = props
+	const {className, classes = {}, ...rest} = props
 
 	return (
 		<Switch
 			{...rest}
 			classes={{
-				root: classnames(
-					styles.root,
-					className,
-					classes.root,
-					checked ? styles.checked : styles.unchecked
-				),
+				root: classnames(styles.root, className, classes.root),
 				track: styles.track,
 				checked: styles.checked,
 				thumb: styles.thumb,

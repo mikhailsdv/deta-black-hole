@@ -10,7 +10,7 @@ import styles from "./index.module.scss"
 export default function AvailableSpace(props) {
 	const {taken = 0, className, classes = {}, ...rest} = props
 	let width = taken / 1_073_741_824
-	width < 1 && (width = 1)
+	width < 1 && width !== 0 && (width = 1)
 
 	return (
 		<Card

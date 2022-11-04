@@ -34,12 +34,14 @@ export default function ExternalFile(props) {
 			}
 			clearInterval(int.current)
 			setProgress(1)
-			onFinish(key)
 			setFinished(true)
 			setTimeout(() => {
 				setFadeOut(true)
 				setTimeout(() => {
 					setCollapse(true)
+					setTimeout(() => {
+						onFinish(key)
+					}, 500)
 				}, 500)
 			}, 2000)
 		} catch (err) {

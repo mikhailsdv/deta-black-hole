@@ -155,14 +155,14 @@ const FileUploadField = props => {
 								key={file.data.id}
 								file={file.data}
 								className={styles.droppedFile}
-								onFinish={onFinish}
+								onFinish={key => onFinish(key, file)}
 							/>
 						) : (
 							<ExternalFile
 								key={file.data}
 								url={file.data}
 								className={styles.droppedFile}
-								onFinish={onFinish}
+								onFinish={key => onFinish(key, file)}
 							/>
 						)
 					)}

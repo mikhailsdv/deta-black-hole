@@ -54,6 +54,19 @@
 		}
 	}
 
+	&.secondary {
+		background-color: fade-out($accent-color, 0.9);
+		color: $hover-color;
+		transition: $transition;
+		.preloader {
+			color: $hover-color;
+		}
+
+		&:not([disabled]):hover {
+			background-color: fade-out($accent-color, 0.8);
+		}
+	}
+
 	&.no-border {
 		color: $accent-color;
 		.preloader {

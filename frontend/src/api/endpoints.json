@@ -21,10 +21,10 @@
 		"method": "get"
 	},
 	{
-		"name": "deletePhoto",
-		"url": "/photo",
+		"name": "deletePhotos",
+		"url": "/photos",
 		"method": "delete",
-		"params": ["key"]
+		"params": ["ids"]
 	},
 	{
 		"name": "getSinglePhoto",
@@ -37,5 +37,50 @@
 		"method": "post",
 		"params": ["url"],
 		"timeout": 30000
+	},
+	{
+		"name": "getPrivateWhiteHole",
+		"url": "/white-hole/private/{key}",
+		"method": "get"
+	},
+	{
+		"name": "getPublicWhiteHole",
+		"url": "/white-hole/public/{key}",
+		"method": "get"
+	},
+	{
+		"name": "getWhiteHoles",
+		"url": "/white-holes",
+		"method": "get",
+		"params": ["limit", "offset"]
+	},
+	{
+		"name": "createWhiteHole",
+		"url": "/white-hole",
+		"method": "post",
+		"params": ["images", "is_public", "name"]
+	},
+	{
+		"name": "editWhiteHole",
+		"url": "/white-hole/{key}",
+		"method": "put",
+		"params": ["is_public"]
+	},
+	{
+		"name": "deleteWhiteHole",
+		"url": "/white-hole/{key}",
+		"method": "delete"
+	},
+	{
+		"name": "deletePhotosFromWhiteHole",
+		"url": "/white-hole/photos",
+		"method": "delete",
+		"params": ["white_hole_key", "ids"]
+	},
+	{
+		"name": "addPhotosToWhiteHole",
+		"url": "/white-hole/photos",
+		"method": "put",
+		"params": ["white_hole_key", "ids"]
 	}
 ]

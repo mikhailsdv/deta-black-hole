@@ -42,12 +42,14 @@ export default function DroppedFile(props) {
 				setError(true)
 				return
 			}
-			onFinish(key)
 			setFinished(true)
 			setTimeout(() => {
 				setFadeOut(true)
 				setTimeout(() => {
 					setCollapse(true)
+					setTimeout(() => {
+						onFinish(key)
+					}, 500)
 				}, 500)
 			}, 2000)
 		} catch (err) {

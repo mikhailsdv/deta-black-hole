@@ -1,0 +1,28 @@
+@import "../../styles/variables.scss";
+
+.root {
+	position: fixed;
+	bottom: 0;
+	z-index: 8;
+	width: 100%;
+
+	.container {
+		position: relative;
+
+		.panel {
+			position: relative;
+			padding: 8px;
+			width: 100%;
+			border-top-right-radius: 12px;
+			border-top-left-radius: 12px;
+			background-color: $block-placeholder-color;
+			transition: $transition;
+			box-shadow: 0 -1px 5px -1px rgba(0, 0, 0, .4);
+			transform: translateY(100%);
+
+			&.visible {
+				transform: translateY(0);
+			}
+		}
+	}
+}

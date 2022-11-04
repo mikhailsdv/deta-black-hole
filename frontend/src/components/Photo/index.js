@@ -17,6 +17,7 @@ import Card from "../Card"
 import Button from "../Button"
 import IconButton from "../IconButton"
 import Tooltip from "../Tooltip"
+import DoubleClick from "../DoubleClick"
 import {FlatIcon} from "../FlatIcon"
 
 import styles from "./index.module.scss"
@@ -37,8 +38,13 @@ export default function Photo(props) {
 		size,
 		extension,
 		unix_date,
+		isChecked,
+		onCheck,
 		onDelete: onDeleteProp,
 		onZoom,
+		isWhiteHole,
+		whiteHoleKey,
+		isPublic,
 		className,
 		...rest
 	} = props
@@ -53,7 +59,7 @@ export default function Photo(props) {
 	)
 	useMemo(() => `thumbnail_${src}`, [src])
 	const {enqueueSnackbar} = useSnackbar()
-	const {deletePhoto} = useApi()
+	const {deletePhotos, deletePhotosFromWhiteHole} = useApi()
 
 	const [loadingCopyImage, setLoadingCopyImage] = useState(false)
 	const [loadingDelete, setLoadingDelete] = useState(false)
@@ -123,20 +129,6 @@ export default function Photo(props) {
 		}
 	}, [enqueueSnackbar, src])
 
-	const confirmDelete = useCallback(
-		e => {
-			if (e.detail === 1) {
-				clickTimer.current = setTimeout(() => {
-					enqueueSnackbar({
-						variant: "warning",
-						message: "Double-click to delete this photo",
-					})
-				}, 300)
-			}
-		},
-		[enqueueSnackbar]
-	)
-
 	const onLoad = useCallback(img => {
 		imgRef.current = img
 	}, [])
@@ -144,7 +136,12 @@ export default function Photo(props) {
 	const onDelete = useCallback(async () => {
 		clearTimeout(clickTimer.current)
 		setLoadingDelete(true)
-		const {status} = await deletePhoto({key: id})
+		const {status} = isWhiteHole
+			? await deletePhotosFromWhiteHole({
+					white_hole_key: whiteHoleKey,
+					ids: [id],
+			  })
+			: await deletePhotos({ids: [id]})
 		setLoadingDelete(false)
 		if (status) {
 			onDeleteProp(id)
@@ -158,7 +155,15 @@ export default function Photo(props) {
 				message: "Couldn't delete.",
 			})
 		}
-	}, [id, deletePhoto, enqueueSnackbar, onDeleteProp])
+	}, [
+		isWhiteHole,
+		deletePhotosFromWhiteHole,
+		whiteHoleKey,
+		id,
+		deletePhotos,
+		onDeleteProp,
+		enqueueSnackbar,
+	])
 
 	return (
 		<Card className={classnames(styles.root, className)} {...rest}>
@@ -173,6 +178,17 @@ export default function Photo(props) {
 					{extension.replace(".", "").toUpperCase()}{" "}
 					{prettyBytes(size).toUpperCase()}
 				</div>
+				{!isPublic && (
+					<div
+						className={classnames(
+							styles.checkbox,
+							isChecked && styles.checked
+						)}
+						onClick={onCheck}
+					>
+						{isChecked && <FlatIcon name={"fi-br-check"} />}
+					</div>
+				)}
 			</div>
 
 			<Button
@@ -202,15 +218,22 @@ export default function Photo(props) {
 						<FlatIcon name={"fi-br-share"} />
 					</IconButton>
 				</Tooltip>
-				<IconButton
-					variant={"secondary"}
-					small
-					onClick={confirmDelete}
-					onDoubleClick={onDelete}
-					isLoading={loadingDelete}
-				>
-					<FlatIcon name={"fi-br-trash"} />
-				</IconButton>
+				{!isPublic && (
+					<DoubleClick
+						onClick={onDelete}
+						message="Double-click to delete this photo"
+						component={"div"}
+					>
+						<IconButton
+							variant={"secondary"}
+							small
+							isLoading={loadingDelete}
+							fullWidth
+						>
+							<FlatIcon name={"fi-br-trash"} />
+						</IconButton>
+					</DoubleClick>
+				)}
 			</div>
 		</Card>
 	)
