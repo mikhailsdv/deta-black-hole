@@ -4,6 +4,8 @@ import copy from "copy-to-clipboard"
 import {Route, Routes, Navigate, useNavigate, useMatch} from "react-router-dom"
 import useDialog from "../hooks/useDialog"
 import {useSnackbar} from "notistack"
+import {numberWithSpaces} from "../functions/utils"
+import urlJoin from "url-join"
 
 import Container from "@mui/material/Container"
 import Grid from "@mui/material/Grid"
@@ -18,16 +20,18 @@ import Image from "../components/Image"
 import WhiteHole from "../components/WhiteHole"
 import Button from "../components/Button"
 import TextField from "../components/TextField"
+import IntegrationTemplate from "../components/IntegrationTemplate"
+import Tabs from "../components/Tabs"
+import Tab from "../components/Tab"
 import AvailableSpace from "../components/AvailableSpace"
 import GitHubButton from "react-github-btn"
 import CircularProgress from "@mui/material/CircularProgress"
-import {createFlatIcon} from "../components/FlatIcon"
+import IconButton from "../components/IconButton"
+import {createFlatIcon, FlatIcon} from "../components/FlatIcon"
 
 import logo from "../images/android-chrome-192x192.png"
 
 import styles from "./index.module.scss"
-import {numberWithSpaces} from "../functions/utils"
-import urlJoin from "url-join"
 import {Divider} from "@mui/material"
 
 const App = () => {
@@ -42,6 +46,9 @@ const App = () => {
 		addPhotosToWhiteHole,
 		deleteWhiteHole,
 		deletePhotos,
+		createIntegration,
+		deleteIntegration,
+		getIntegrations,
 	} = useApi()
 	const navigate = useNavigate()
 	const {enqueueSnackbar} = useSnackbar()
@@ -75,6 +82,13 @@ const App = () => {
 	const [isLoadingAddToWhiteHole, setIsLoadingAddToWhiteHole] =
 		useState(false)
 
+	const [isLoadingCreateIntegration, setIsLoadingCreateIntegration] =
+		useState(false)
+	const [integrations, setIntegrations] = useState([])
+	const [integrationTab, setIntegrationTab] = useState("create")
+	const [integrationLink, setIntegrationLink] = useState("")
+	const [integrationName, setIntegrationName] = useState("")
+
 	const {
 		open: openPhotoDialog,
 		close: closePhotoDialog,
@@ -92,6 +106,12 @@ const App = () => {
 		close: closeAddToWhiteHoleDialog,
 		props: addToWhiteHoleDialogProps,
 		Component: AddToWhiteHoleDialog,
+	} = useDialog()
+	const {
+		open: openIntegrationDialog,
+		close: closeIntegrationDialog,
+		props: integrationDialogProps,
+		Component: IntegrationDialog,
 	} = useDialog()
 
 	const updateLibraryInfo = useCallback(async () => {
@@ -307,6 +327,25 @@ const App = () => {
 		[deleteWhiteHole, enqueueSnackbar, navigate]
 	)
 
+	const onCreateIntegration = useCallback(async () => {
+		setIsLoadingCreateIntegration(true)
+		const {integration_key} = await createIntegration({
+			name: integrationName,
+		})
+		setIntegrationLink(
+			urlJoin(window.location.origin, "integration", integration_key)
+		)
+		setIsLoadingCreateIntegration(false)
+	}, [createIntegration, integrationName])
+
+	const onDeleteIntegration = useCallback(
+		async key => {
+			setIntegrations(prev => prev.filter(item => item.key !== key))
+			await deleteIntegration({key})
+		},
+		[deleteIntegration]
+	)
+
 	useEffect(() => {
 		if (whiteHoleVisibility === "public") return
 		let blockListener = false
@@ -356,13 +395,35 @@ const App = () => {
 	}, [getPhotos, whiteHoleVisibility])
 
 	useEffect(() => {
-		if (whiteHoleVisibility === "public") return
+		if (whiteHoleVisibility === "public" || isLoadingCreateIntegration)
+			return
+		;(async () => {
+			const {items} = await getIntegrations()
+			items.forEach(
+				item =>
+					(item.url = urlJoin(
+						window.location.origin,
+						process.env.REACT_APP_API_BASE_URL,
+						"integration",
+						item.key
+					))
+			)
+			setIntegrations(items)
+		})()
+	}, [getIntegrations, whiteHoleVisibility, isLoadingCreateIntegration])
+
+	useEffect(() => {
+		if (whiteHoleVisibility === "public" || isLoadingCreateIntegration)
+			return
 		;(async function loop({limit, offset}) {
 			const {count, items, next} = await getWhiteHoles({limit, offset})
 			setTotalWhiteHoles(count)
 			setWhiteHoles(prev =>
-				items.filter(
-					item => !prev.some(prevItem => prevItem.key === item.key)
+				prev.concat(
+					items.filter(
+						item =>
+							!prev.some(prevItem => prevItem.key === item.key)
+					)
 				)
 			)
 
@@ -371,7 +432,7 @@ const App = () => {
 				await loop({limit, offset})
 			}
 		})({limit: 20, offset: 0})
-	}, [getWhiteHoles, whiteHoleVisibility])
+	}, [getWhiteHoles, whiteHoleVisibility, isLoadingCreateIntegration])
 
 	useEffect(() => {
 		if (whiteHoleVisibility !== "private") return
@@ -521,6 +582,197 @@ const App = () => {
 					))}
 				</div>
 			</AddToWhiteHoleDialog>
+
+			<IntegrationDialog
+				{...integrationDialogProps}
+				maxWidth={"md"}
+				className={styles.integrationDialog}
+				actions={[
+					<Button
+						key={"close"}
+						variant={"secondary"}
+						small
+						onClick={closeIntegrationDialog}
+						disabled={isLoadingCreateIntegration}
+					>
+						Close
+					</Button>,
+				]}
+			>
+				<Typography variant={"h5"} gutterBottom>
+					Create an Integration
+				</Typography>
+				<Typography
+					variant={"subtitle2"}
+					emphasis={"medium"}
+					component={"div"}
+					gutterBottom
+				>
+					Integrations allow you to save images from other apps to
+					your White Holes.
+				</Typography>
+				<Tabs
+					value={integrationTab}
+					onChange={(_, tab) => setIntegrationTab(tab)}
+				>
+					<Tab label="Create" value={"create"} />
+					<Tab label="Manage" value={"manage"} />
+					<Tab label="For DEVs" value={"devs"} />
+				</Tabs>
+				<br />
+				{integrationTab === "create" && (
+					<>
+						{integrationLink && (
+							<div className={styles.inputBlock}>
+								<TextField
+									label="Integration link"
+									value={integrationLink}
+									onClick={() => {}}
+								/>
+								<IconButton
+									variant="primary"
+									onClick={() => {
+										copy(integrationLink)
+										setIntegrationLink("")
+										setIntegrationName("")
+									}}
+								>
+									<FlatIcon name={"fi-br-copy-alt"} />
+								</IconButton>
+							</div>
+						)}
+						{!integrationLink && (
+							<>
+								<div className={styles.inputBlock}>
+									<TextField
+										label="Name your Integration *"
+										value={integrationName}
+										onChange={e =>
+											setIntegrationName(e.target.value)
+										}
+									/>
+									<Button
+										variant="primary"
+										onClick={onCreateIntegration}
+										disabled={
+											isLoadingCreateIntegration ||
+											integrationName.trim().length === 0
+										}
+										isLoading={isLoadingCreateIntegration}
+									>
+										Create
+									</Button>
+								</div>
+								<br />
+								<Typography
+									variant={"subtitle2bold"}
+									gutterBottom
+								>
+									Integration templates:
+								</Typography>
+								<div className={styles.integrations}>
+									{[
+										{
+											name: "Surfer",
+											image: require("../images/integrations/surfer.png"),
+											integrationName:
+												"Saved from Surfer",
+											onClick: function () {
+												setIntegrationName(
+													"Saved from Surfer"
+												)
+											},
+										},
+									].map(item => (
+										<IntegrationTemplate
+											key={item.name}
+											selected={
+												item.integrationName ===
+												integrationName
+											}
+											image={item.image}
+											name={item.name}
+											onClick={item.onClick}
+										/>
+									))}
+								</div>
+							</>
+						)}
+					</>
+				)}
+				{integrationTab === "manage" && (
+					<>
+						{integrations.length === 0 && (
+							<Typography
+								variant={"subtitle2"}
+								emphasis={"medium"}
+							>
+								You haven't created any Integrations yet
+							</Typography>
+						)}
+						{integrations.map(item => (
+							<div key={item.key}>
+								<div className={styles.inputBlock}>
+									<TextField
+										label={item.name || "No name"}
+										value={item.url}
+										onChange={() => {}}
+									/>
+									<div className={styles.actions}>
+										<IconButton
+											variant="primary"
+											onClick={() => copy(item.url)}
+										>
+											<FlatIcon name={"fi-br-copy-alt"} />
+										</IconButton>
+										<IconButton
+											variant="negative"
+											onClick={() =>
+												onDeleteIntegration(item.key)
+											}
+										>
+											<FlatIcon name={"fi-br-trash"} />
+										</IconButton>
+									</div>
+								</div>
+								<br />
+							</div>
+						))}
+					</>
+				)}
+				{integrationTab === "devs" && (
+					<>
+						<Typography
+							variant={"body2"}
+							emphasis={"medium"}
+							gutterBottom
+						>
+							You can save images to your White Hole using
+							Integrations API. Just POST the url of an image to
+							your Integration link.
+						</Typography>
+						<Typography variant={"body2"} emphasis={"medium"}>
+							Fetch API request example:
+						</Typography>
+						<br />
+						<code
+							className={styles.code}
+						>{`fetch(your_integration_url, {
+    method: "POST",
+    body: JSON.stringify({url: your_image_url}),
+    headers: {"Content-Type": "application/json"},
+)
+    .then((response) => response.json())
+    .then((data) => {
+        const {status, error} = data;
+        if (error) {
+        	return alert(error)
+        }
+        alert("Success!")
+    })`}</code>
+					</>
+				)}
+			</IntegrationDialog>
 
 			<WhiteHoleDialog
 				{...whiteHoleDialogProps}
@@ -913,55 +1165,69 @@ const App = () => {
 								<br />
 								<br />
 
-								{whiteHoles.length > 0 && (
-									<>
-										<div className={styles.libraryHeader}>
-											<div className={styles.left}>
-												<Typography
-													variant={"h4"}
-													className={styles.mb6}
-												>
-													Your White Holes
-												</Typography>
-												{totalWhiteHoles > 0 && (
-													<Typography
-														variant={"body1"}
-														emphasis={"medium"}
-													>
-														There{" "}
-														{totalWhiteHoles === 1
-															? "is"
-															: "are"}{" "}
-														{totalWhiteHoles}{" "}
-														{totalWhiteHoles === 1
-															? "White Hole"
-															: "White Holes"}{" "}
-														in your Black Hole
-													</Typography>
-												)}
-											</div>
-										</div>
-										<br />
-										<Grid container spacing={2}>
-											{whiteHoles.map(whiteHole => (
-												<Grid
-													key={whiteHole.key}
-													item
-													xs={12}
-													sm={6}
-													md={6}
-												>
-													<WhiteHole
-														id={whiteHole.key}
-														{...whiteHole}
-													/>
-												</Grid>
-											))}
+								<div className={styles.libraryHeader}>
+									<div className={styles.left}>
+										<Typography
+											variant={"h4"}
+											className={styles.mb6}
+										>
+											Your White Holes
+										</Typography>
+										{totalWhiteHoles > 0 && (
+											<Typography
+												variant={"body1"}
+												emphasis={"medium"}
+											>
+												There{" "}
+												{totalWhiteHoles === 1
+													? "is"
+													: "are"}{" "}
+												{totalWhiteHoles}{" "}
+												{totalWhiteHoles === 1
+													? "White Hole"
+													: "White Holes"}{" "}
+												in your Black Hole
+											</Typography>
+										)}
+										{total === 0 && (
+											<Typography
+												variant={"body1"}
+												emphasis={"medium"}
+											>
+												Your don't have any White Holes
+												yet
+											</Typography>
+										)}
+									</div>
+									<div className={styles.right}>
+										<Button
+											variant={"primary"}
+											small
+											onClick={openIntegrationDialog}
+										>
+											Create Integration
+										</Button>
+									</div>
+								</div>
+								<br />
+								<Grid container spacing={2}>
+									{whiteHoles.map(whiteHole => (
+										<Grid
+											key={whiteHole.key}
+											item
+											xs={12}
+											sm={6}
+											md={6}
+										>
+											<WhiteHole
+												id={whiteHole.key}
+												{...whiteHole}
+											/>
 										</Grid>
-										<br />
-										<br />
-									</>
-								)}
+									))}
+								</Grid>
+								<br />
+								<br />
 
 								<div className={styles.libraryHeader}>
 									<div className={styles.left}>
@@ -996,7 +1262,10 @@ const App = () => {
 										)}
 									</div>
 									<div className={styles.right}>
-										<AvailableSpace taken={takenStorage} />
+										<AvailableSpace
+											taken={takenStorage}
+											className={styles.availableSpace}
+										/>
 									</div>
 								</div>
 								<br />

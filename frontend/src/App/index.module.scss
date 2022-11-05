@@ -74,12 +74,21 @@
 			flex-direction: column;
 			justify-content: unset;
 			align-items: unset;
+			flex-grow: 1;
 		}
 
 		.right {
-			width: 100%;
-			max-width: 250px;
 			flex: none;
+			@media screen and (max-width: $sm) {
+				width: 100%;
+			}
+
+			.availableSpace {
+				width: 250px;
+				@media screen and (max-width: $xs) {
+					width: 100%;
+				}
+			}
 		}
 	}
 }
@@ -223,5 +232,39 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 12px;
+	}
+}
+
+.integrationDialog {
+	.inputBlock {
+		display: flex;
+		gap: 12px;
+		width: 100%;
+
+		& > *:first-child {
+			flex-grow: 1;
+		}
+
+		& > *:last-child {
+			flex: none;
+			display: flex;
+			gap: 8px;
+		}
+	}
+
+	.integrations {
+		display: flex;
+		gap: 12px;
+		flex-wrap: wrap;
+		margin-top: 12px;
+	}
+
+	.code {
+		white-space: break-spaces;
+		color: chartreuse;
+		background-color: black;
+		padding: 20px;
+		display: block;
+		border-radius: 12px;
 	}
 }

@@ -17,6 +17,10 @@ const {
   updateWhiteHole,
   deletePhotosFromWhiteHole,
   addPhotosToWhiteHole,
+  getIntegration,
+  createIntegration,
+  deleteIntegration,
+  getIntegrations,
 } = require("./db");
 
 expressApp.use(express.json());
@@ -68,6 +72,52 @@ expressApp.get("/key/:key", async (req, res) => {
     return;
   }
   res.send(photo);
+});
+
+expressApp.post("/integration/:key", async (req, res) => {
+  try {
+    const response = await axios({
+      url: req.body.url,
+      responseType: "arraybuffer",
+      headers: {
+        "user-agent": req.headers["user-agent"],
+      },
+    });
+    const type =
+      req.body.url.match(/^data:(.+?);/)?.[1] ||
+      response.headers["content-type"] ||
+      "image/jpeg";
+    const photo = await savePhoto({
+      name: `integration.${mime.getExtension(type)}`,
+      size: response.data.length,
+      data: response.data,
+    });
+    const { white_hole_key } = await getIntegration({ key: req.params.key });
+    const status = await addPhotosToWhiteHole({
+      white_hole_key,
+      ids: [photo.key],
+    });
+    res.json({
+      status,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({
+      error: err.toString(),
+    });
+  }
+});
+
+expressApp.post("/integration", async (req, res) => {
+  res.json(await createIntegration({ name: req.body.name }));
+});
+
+expressApp.delete("/integration", async (req, res) => {
+  res.json(await deleteIntegration({ key: req.body.key }));
+});
+
+expressApp.get("/integration", async (req, res) => {
+  res.json(await getIntegrations());
 });
 
 expressApp.post("/download", async (req, res) => {

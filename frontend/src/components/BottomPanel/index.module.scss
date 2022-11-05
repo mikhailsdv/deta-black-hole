@@ -5,6 +5,11 @@
 	bottom: 0;
 	z-index: 8;
 	width: 100%;
+	transform: translateY(100%);
+	transition: $transition;
+	&.visible {
+		transform: translateY(0);
+	}
 
 	.container {
 		position: relative;
@@ -16,13 +21,7 @@
 			border-top-right-radius: 12px;
 			border-top-left-radius: 12px;
 			background-color: $block-placeholder-color;
-			transition: $transition;
 			box-shadow: 0 -1px 5px -1px rgba(0, 0, 0, .4);
-			transform: translateY(100%);
-
-			&.visible {
-				transform: translateY(0);
-			}
 		}
 	}
 }

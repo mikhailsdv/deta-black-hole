@@ -7,6 +7,7 @@ const deta = Deta(DETA_PROJECT_KEY);
 const db = deta.Base("black-hole");
 const drive = deta.Drive("black-hole");
 const whiteHolesDB = deta.Base("white-holes");
+const integrationsDB = deta.Base("integrations");
 
 const get = async (base, id) => {
   const { count, items } = await base.fetch({ id });
@@ -150,8 +151,10 @@ const getWhiteHoles = async ({ limit = 20, offset = 0 }) => {
   items.sort((b, a) => a.unix_date - b.unix_date);
   const sliced = items.slice(offset, offset + limit);
   for (const item of sliced) {
-    const { items: images } = await db.fetch(or(item.images, "id"));
-    item.images = images.slice(0, 4);
+    if (item.images.length) {
+      const { items: images } = await db.fetch(or(item.images, "id"));
+      item.images = images.slice(0, 4);
+    }
   }
   return {
     count,
@@ -201,11 +204,49 @@ const createWhiteHole = async ({ name, images, is_public }) => {
 const deleteWhiteHole = async ({ key }) => {
   try {
     await whiteHolesDB.delete(key);
+    const { items } = await integrationsDB.fetch({ white_hole_key: key });
+    if (items.length) {
+      await integrationsDB.delete(items[0].key);
+    }
     return true;
   } catch (err) {
     console.error(err);
     return false;
   }
+};
+
+const getIntegration = async ({ key }) => {
+  const integration = await integrationsDB.get(key);
+  if (!integration) {
+    throw new Error("Integration doesn't exist");
+  }
+  return integration;
+};
+
+const createIntegration = async ({ name }) => {
+  const { key: white_hole_key } = await createWhiteHole({
+    name,
+    images: [],
+    is_public: false,
+  });
+  const { key: integration_key } = await integrationsDB.put({
+    name,
+    white_hole_key,
+  });
+  return {
+    name,
+    white_hole_key,
+    integration_key,
+  };
+};
+
+const deleteIntegration = async ({ key }) => {
+  await integrationsDB.delete(key);
+  return true;
+};
+
+const getIntegrations = async () => {
+  return await integrationsDB.fetch();
 };
 
 module.exports = {
@@ -220,4 +261,8 @@ module.exports = {
   deleteWhiteHole,
   deletePhotosFromWhiteHole,
   addPhotosToWhiteHole,
+  getIntegration,
+  createIntegration,
+  deleteIntegration,
+  getIntegrations,
 };

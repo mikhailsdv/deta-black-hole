@@ -82,5 +82,22 @@
 		"url": "/white-hole/photos",
 		"method": "put",
 		"params": ["white_hole_key", "ids"]
+	},
+	{
+		"name": "createIntegration",
+		"url": "/integration",
+		"method": "post",
+		"params": ["name"]
+	},
+	{
+		"name": "deleteIntegration",
+		"url": "/integration",
+		"method": "delete",
+		"params": ["key"]
+	},
+	{
+		"name": "getIntegrations",
+		"url": "/integration",
+		"method": "get"
 	}
 ]

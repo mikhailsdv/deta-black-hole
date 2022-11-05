@@ -10,6 +10,7 @@ micros:
       - "/static/*"
       - "/api/photo/*"
       - "/api/white-hole/public/*"
+      - "/api/integration/*"
     primary: true
     commands:
       - npm run build
