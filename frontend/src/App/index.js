@@ -333,7 +333,12 @@ const App = () => {
 			name: integrationName,
 		})
 		setIntegrationLink(
-			urlJoin(window.location.origin, "integration", integration_key)
+			urlJoin(
+				window.location.origin,
+				process.env.REACT_APP_API_BASE_URL,
+				"integration",
+				integration_key
+			)
 		)
 		setIsLoadingCreateIntegration(false)
 	}, [createIntegration, integrationName])
