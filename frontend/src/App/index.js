@@ -3,6 +3,8 @@ import useApi from "../api/useApi"
 import copy from "copy-to-clipboard"
 import {Route, Routes, Navigate, useNavigate, useMatch} from "react-router-dom"
 import useDialog from "../hooks/useDialog"
+import {CopyBlock, monokai} from "react-code-blocks"
+
 import {useSnackbar} from "notistack"
 import {numberWithSpaces} from "../functions/utils"
 import urlJoin from "url-join"
@@ -65,6 +67,8 @@ const App = () => {
 	const [total, setTotal] = useState(0)
 	const [deletedKeys, setDeletedKeys] = useState([])
 	const [dialogPhotoSrc, setDialogPhotoSrc] = useState("")
+	const [dialogThumbnailSrc, setDialogThumbnailSrc] = useState("")
+	const [isLoadingImage, setIsLoadingImage] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 	const [link, setLink] = useState("")
 	const [showLink, setShowLink] = useState(false)
@@ -138,8 +142,10 @@ const App = () => {
 	}, [])
 
 	const zoomPhoto = useCallback(
-		src => {
+		(src, thumbnail) => {
+			setIsLoadingImage(true)
 			setDialogPhotoSrc(src)
+			setDialogThumbnailSrc(thumbnail || src)
 			openPhotoDialog()
 		},
 		[openPhotoDialog]
@@ -519,12 +525,18 @@ const App = () => {
 				]}
 			>
 				<div className={styles.imageWrapper}>
-					<CircularProgress
-						thickness={4}
-						className={styles.progress}
+					{isLoadingImage && (
+						<CircularProgress
+							thickness={4}
+							className={styles.progress}
+						/>
+					)}
+					<Image
+						src={dialogPhotoSrc}
+						className={styles.image}
+						onLoad={() => setIsLoadingImage(false)}
 					/>
-					<Image src={dialogPhotoSrc} className={styles.image} />
-					<Image src={dialogPhotoSrc} className={styles.blur} />
+					<Image src={dialogThumbnailSrc} className={styles.blur} />
 				</div>
 			</PhotoDialog>
 
@@ -747,34 +759,74 @@ const App = () => {
 				)}
 				{integrationTab === "devs" && (
 					<>
+						<Typography variant={"body2"} emphasis={"medium"}>
+							You can save images to your White Hole using
+							Integrations API. Just POST the url of an image or
+							send the file using <tt>multipart/form-data</tt> to
+							your Integration link.
+						</Typography>
+						<br />
 						<Typography
 							variant={"body2"}
 							emphasis={"medium"}
-							gutterBottom
+							className={styles.mb12}
 						>
-							You can save images to your White Hole using
-							Integrations API. Just POST the url of an image to
-							your Integration link.
+							<b>Fetch API request example:</b>
 						</Typography>
-						<Typography variant={"body2"} emphasis={"medium"}>
-							Fetch API request example:
-						</Typography>
-						<br />
-						<code
-							className={styles.code}
-						>{`fetch(your_integration_url, {
+						<CopyBlock
+							text={`fetch(your_integration_url, {
     method: "POST",
     body: JSON.stringify({url: your_image_url}),
     headers: {"Content-Type": "application/json"},
-)
+})
     .then((response) => response.json())
     .then((data) => {
-        const {status, error} = data;
+        const {status, error, url} = data;
         if (error) {
-        	return alert(error)
+            return alert(error)
         }
-        alert("Success!")
-    })`}</code>
+        alert("Success! Direct image url: " + url)
+    })`}
+							language={"javascript"}
+							theme={monokai}
+						/>
+						<br />
+
+						<Typography
+							variant={"body2"}
+							emphasis={"medium"}
+							className={styles.mb12}
+						>
+							<b>
+								Or post <tt>multipart/form-data</tt> with Fetch
+								API:
+							</b>
+						</Typography>
+
+						<CopyBlock
+							text={`//html
+<input type="file" id="photo" />
+
+//js
+const formData = new FormData()
+formData.append("photo", document.getElementById("photo").files[0])
+						
+fetch(your_integration_url, {
+    method: "POST",
+    body: formData
+})
+    .then((response) => response.json())
+    .then((data) => {
+        const {status, error, url} = data;
+        if (error) {
+            return alert(error)
+        }
+        alert("Success! Direct image url: " + url)
+    })`}
+							language={"javascript"}
+							theme={monokai}
+							className={styles.code}
+						/>
 					</>
 				)}
 			</IntegrationDialog>
@@ -839,7 +891,6 @@ const App = () => {
 							/>
 						</div>
 					))}
-					{checkedImages.length > 15 && <Image src={""} />}
 				</div>
 				<div
 					className={styles.visibility}
@@ -984,7 +1035,7 @@ const App = () => {
 													{whiteHole.is_public && (
 														<Button
 															variant={"primary"}
-															small
+															tiny
 															iconAfter={createFlatIcon(
 																"fi-br-share"
 															)}
@@ -1012,7 +1063,7 @@ const App = () => {
 																variant={
 																	"negative"
 																}
-																small
+																tiny
 																iconAfter={createFlatIcon(
 																	"fi-br-trash"
 																)}
@@ -1194,7 +1245,7 @@ const App = () => {
 												in your Black Hole
 											</Typography>
 										)}
-										{total === 0 && (
+										{totalWhiteHoles === 0 && (
 											<Typography
 												variant={"body1"}
 												emphasis={"medium"}
@@ -1207,10 +1258,13 @@ const App = () => {
 									<div className={styles.right}>
 										<Button
 											variant={"primary"}
-											small
 											onClick={openIntegrationDialog}
+											small
+											iconAfter={createFlatIcon(
+												"fi-br-exchange"
+											)}
 										>
-											Create Integration
+											Integrations
 										</Button>
 									</div>
 								</div>
