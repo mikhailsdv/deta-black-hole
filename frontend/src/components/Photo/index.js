@@ -171,7 +171,7 @@ export default function Photo(props) {
 				<Image
 					src={thumbnailSrc}
 					className={styles.image}
-					onClick={() => onZoom(src)}
+					onClick={() => onZoom(src, thumbnailSrc)}
 					onLoad={onLoad}
 				/>
 				<div className={styles.info}>
