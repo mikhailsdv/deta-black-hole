@@ -1,13 +1,17 @@
 @import "../styles/variables.scss";
 
+.mb6 {
+	margin-bottom: 6px;
+}
+
+.mb12 {
+	margin-bottom: 12px;
+}
+
 .container {
 	min-height: 100vh;
 	padding-top: 42px;
 	padding-bottom: 84px;
-
-	.mb6 {
-		margin-bottom: 6px;
-	}
 
 	.opacity08 {
 		opacity: .8;
@@ -100,6 +104,7 @@
 	background-color: $block-placeholder-color;
 	border-radius: 8px;
 	overflow: hidden;
+	transform: translate(0);
 
 	.progress {
 		position: absolute;
@@ -109,7 +114,7 @@
 		bottom: 0;
 		margin: auto;
 		color:$paper-color;
-		z-index: 1;
+		z-index: 2;
 	}
 
 	.blur {
@@ -120,7 +125,7 @@
 		width: 120%;
 		height: 120%;
 		object-fit: cover;
-        z-index: 2;
+        z-index: 1;
 		filter: blur(12px);
 		background-color: transparent;
 		opacity: .8;
@@ -135,6 +140,7 @@
 		object-fit: contain;
 		background-color: transparent;
 		z-index: 3;
+		transform: translate(0);
 	}
 }
 
@@ -260,11 +266,13 @@
 	}
 
 	.code {
-		white-space: break-spaces;
-		color: chartreuse;
-		background-color: black;
-		padding: 20px;
-		display: block;
 		border-radius: 12px;
+	}
+
+	tt {
+		background-color: $block-placeholder-color;
+		padding: 0 4px;
+		margin: 0 2px;
+		border-radius: 4px;
 	}
 }
