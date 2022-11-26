@@ -4,7 +4,14 @@ import notFoundImage from "../../images/not-found.png"
 import styles from "./index.module.scss"
 
 export default function Image(props) {
-	const {src, onLoad: onLoadProp, className, classes = {}, ...rest} = props
+	const {
+		src,
+		onLoad: onLoadProp,
+		transparent,
+		className,
+		classes = {},
+		...rest
+	} = props
 
 	const [isLoaded, setLoaded] = useState(false)
 	const [imageSrc, setImageSrc] = useState(src)
@@ -50,7 +57,8 @@ export default function Image(props) {
 				styles.root,
 				className,
 				classes.root,
-				isLoaded && styles.loaded
+				isLoaded && styles.loaded,
+				transparent && styles.transparent
 			)}
 			{...rest}
 		/>
