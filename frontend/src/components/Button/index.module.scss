@@ -26,6 +26,11 @@
 		height: 44px;
 		padding: 12px 20px;
 	}
+	&.tiny {
+		height: 32px;
+		padding: 8px 12px;
+		font-size: 14px;
+	}
 	&.fullWidth {
 		width: 100%;
 	}
@@ -127,6 +132,7 @@
 	}
 	.label {
 		color: inherit;
+		font-size: inherit;
 		z-index: 2;
 
 		&.pulse {

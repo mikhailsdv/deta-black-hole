@@ -11,6 +11,7 @@ const Button_ = props => {
 	const {
 		fullWidth,
 		small,
+		tiny,
 		loadingText,
 		children,
 		iconAfter: IconAfter,
@@ -27,6 +28,7 @@ const Button_ = props => {
 				styles.root,
 				className,
 				small && styles.small,
+				tiny && styles.tiny,
 				fullWidth && styles.fullWidth,
 				isLoading && styles.loading,
 				variant && styles[variant]
