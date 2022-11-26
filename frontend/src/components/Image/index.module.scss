@@ -7,8 +7,10 @@
 	object-fit: cover;
 	object-position: center;
 	background-color: $block-placeholder-color;
-
 	&.loaded {
 		background-color: transparent;
+	}
+	&.transparent {
+		background-image: url("../../images/transparent.png");
 	}
 }
