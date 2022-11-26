@@ -6,8 +6,11 @@ import CssBaseline from "@mui/material/CssBaseline"
 import {ThemeProvider} from "@mui/material/styles"
 import {createTheme, StyledEngineProvider} from "@mui/material/styles"
 import SnackbarProvider from "./components/SnackbarProvider"
+import { unregister } from './registerServiceWorker';
 import App from "./App"
 import "./styles/globals.scss"
+
+unregister()
 
 const theme = createTheme({
 	palette: {
