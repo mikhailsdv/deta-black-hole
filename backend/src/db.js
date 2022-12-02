@@ -284,7 +284,6 @@ const searchSurfer = async ({query, results}) => {
 	} else {
 		const {value: surfer_host} = await settingsDB.get("surfer_host")
 		const {value: surfer_api_key} = await settingsDB.get("surfer_api_key")
-		console.log(query)
 		const response = await axios({
 			url: `https://${surfer_host}/api/search/image`,
 			params: {query, results},

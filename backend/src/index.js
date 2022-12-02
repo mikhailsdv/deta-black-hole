@@ -139,7 +139,8 @@ expressApp.post("/download", async (req, res) => {
 			url: req.body.url,
 			responseType: "arraybuffer",
 			headers: {
-				"user-agent": req.headers["user-agent"],
+				"user-agent": req.headers["user-agent"] ||
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
 			},
 		})
 		const type =
@@ -208,8 +209,8 @@ expressApp.post("/white-hole", async (req, res) => {
 
 expressApp.get("/white-holes", async (req, res) => {
 	const whiteHoles = await getWhiteHoles({
-		limit: Number(req.query.limit),
-		offset: Number(req.query.offset),
+		limit: Number(req.query.limit) || undefined,
+		offset: Number(req.query.offset) || undefined,
 	})
 	res.send(whiteHoles)
 })
