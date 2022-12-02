@@ -25,9 +25,9 @@
 			background-color: #1106d6;
 			cursor: pointer;
 			outline: none;
-			border: none;
 			border-radius: 12px;
 			overflow: hidden;
+			border: 3px solid #423f3e;
 			transition: $transition;
 			&:hover {
 				filter: brightness(0.9);

@@ -213,22 +213,46 @@ export default function SurferSearch(props) {
 					from your Black Hole.
 				</Typography>
 				<br />
+				<Typography
+					variant={"subtitle2"}
+					emphasis={"outlined"}
+					component={"div"}
+					gutterBottom
+				>
+					1. Open your Canvas
+					<br />
+					2. Click to the three dots on the Surfer app
+					<br />
+					3. Go to Settings
+					<br />
+					4. Go to API Keys tab
+					<br />
+					5. Create new API key
+					<br />
+					6. Paste it in the field below
+				</Typography>
 				<TextField
 					label={"Your Surfer Space API key"}
 					value={surferApiKey}
 					onChange={e => setSurferApiKey(e.target.value)}
-					helperText={
-						"Open your Canvas → click to the three dots on the Surfer app → open settings → create new API key → paste in this field"
-					}
 				/>
 				<br />
+				<Typography
+					variant={"subtitle2"}
+					emphasis={"outlined"}
+					component={"div"}
+					gutterBottom
+				>
+					1. Open Surfer from your Canvas
+					<br />
+					2. Copy the url from the address bar
+					<br />
+					3. Paste it in the field below
+				</Typography>
 				<TextField
 					label={"Your Surfer host"}
 					value={surferHost}
 					onChange={e => setSurferHost(e.target.value)}
-					helperText={
-						"Open Surfer from your canvas → copy url → paste in this field"
-					}
 				/>
 			</Dialog>
 
