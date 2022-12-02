@@ -20,4 +20,6 @@ micros:
     src: ./backend/
     path: api
     engine: nodejs16
+    presets:
+      api_keys: true
     run: "node server.js"
