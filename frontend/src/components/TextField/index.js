@@ -13,6 +13,7 @@ const TextField_ = props => {
 		icon: Icon,
 		maskProps,
 		className,
+		InputProps,
 		classes = {},
 		children,
 		...rest
@@ -47,6 +48,7 @@ const TextField_ = props => {
 					onBlur={onBlur}
 					InputProps={{
 						classes: {root: styles.Input, input: styles.input},
+						...InputProps,
 					}}
 					InputLabelProps={{
 						classes: {
