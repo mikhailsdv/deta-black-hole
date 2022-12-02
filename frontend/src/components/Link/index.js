@@ -26,11 +26,11 @@ const Link_ = props => {
 	return internal ? (
 		<Link
 			to={to}
-			data-underline={underline}
 			className={classnames(
 				styles.root,
 				className,
-				block && styles.block
+				block && styles.block,
+				underline && styles[`underline-${underline}`]
 			)}
 			{...rest}
 		>
@@ -39,11 +39,11 @@ const Link_ = props => {
 	) : (
 		<a
 			href={to}
-			data-underline={underline}
 			className={classnames(
 				styles.root,
 				className,
-				block && styles.block
+				block && styles.block,
+				underline && styles[`underline-${underline}`]
 			)}
 			{...aProps}
 			{...rest}
