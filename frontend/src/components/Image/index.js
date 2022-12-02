@@ -6,6 +6,7 @@ import styles from "./index.module.scss"
 export default function Image(props) {
 	const {
 		src,
+		thumbnail,
 		onLoad: onLoadProp,
 		transparent,
 		className,
@@ -14,7 +15,7 @@ export default function Image(props) {
 	} = props
 
 	const [isLoaded, setLoaded] = useState(false)
-	const [imageSrc, setImageSrc] = useState(src)
+	const [imageSrc, setImageSrc] = useState(thumbnail || src)
 	const [isError, setIsError] = useState(false)
 	const imgEl = useRef(null)
 
@@ -22,8 +23,9 @@ export default function Image(props) {
 		e => {
 			setLoaded(true)
 			onLoadProp && onLoadProp(e.target)
+			thumbnail && setImageSrc(src)
 		},
-		[onLoadProp]
+		[onLoadProp, src, thumbnail]
 	)
 
 	const onError = useCallback(e => {
@@ -31,18 +33,25 @@ export default function Image(props) {
 	}, [])
 
 	useEffect(() => {
-		const img = imgEl.current
-		img.addEventListener("load", onLoad)
-		img.addEventListener("error", onError)
-		return () => {
-			img.removeEventListener("load", onLoad)
-			img.removeEventListener("error", onError)
+		if (thumbnail && src) {
+			const img = document.createElement("img")
+			img.src = src
+			img.addEventListener("load", onLoad)
+			img.addEventListener("error", onError)
+			return () => {
+				img.removeEventListener("load", onLoad)
+				img.removeEventListener("error", onError)
+			}
+		} else {
+			const img = imgEl.current
+			img.addEventListener("load", onLoad)
+			img.addEventListener("error", onError)
+			return () => {
+				img.removeEventListener("load", onLoad)
+				img.removeEventListener("error", onError)
+			}
 		}
-	}, [src, onLoad, onError])
-
-	useEffect(() => {
-		src ? setImageSrc(src) : setIsError(true)
-	}, [src])
+	}, [thumbnail, src, onLoad, onError])
 
 	const actualSrc = isError ? notFoundImage : imageSrc
 
@@ -52,7 +61,7 @@ export default function Image(props) {
 			alt=""
 			src={actualSrc}
 			ref={imgEl}
-			crossOrigin="anonymous"
+			//crossOrigin="anonymous"
 			className={classnames(
 				styles.root,
 				className,
