@@ -99,5 +99,22 @@
 		"name": "getIntegrations",
 		"url": "/integration",
 		"method": "get"
+	},
+	{
+		"name": "searchSurfer",
+		"url": "/search-surfer",
+		"method": "get",
+		"params": ["query", "results"]
+	},
+	{
+		"name": "getSettings",
+		"url": "/settings",
+		"method": "get"
+	},
+	{
+		"name": "setSettings",
+		"url": "/settings",
+		"method": "put",
+		"params": ["key", "value"]
 	}
 ]

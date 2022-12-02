@@ -4,7 +4,6 @@ import copy from "copy-to-clipboard"
 import {Route, Routes, Navigate, useNavigate, useMatch} from "react-router-dom"
 import useDialog from "../hooks/useDialog"
 import {CopyBlock, monokai} from "react-code-blocks"
-
 import {useSnackbar} from "notistack"
 import {numberWithSpaces} from "../functions/utils"
 import urlJoin from "url-join"
@@ -25,6 +24,7 @@ import TextField from "../components/TextField"
 import IntegrationTemplate from "../components/IntegrationTemplate"
 import Tabs from "../components/Tabs"
 import Tab from "../components/Tab"
+import SurferSearch from "../components/SurferSearch"
 import AvailableSpace from "../components/AvailableSpace"
 import GitHubButton from "react-github-btn"
 import CircularProgress from "@mui/material/CircularProgress"
@@ -1185,8 +1185,9 @@ fetch(your_integration_url, {
 									placeholder="Drop photos here"
 									name="photos"
 									onFinish={onFinish}
+									className={styles.mb12}
 								/>
-								<br />
+								<SurferSearch onSave={onDropFiles} />
 								<div className={styles.linkBlock}>
 									{!showLink && (
 										<Typography
