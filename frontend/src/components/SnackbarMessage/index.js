@@ -27,6 +27,7 @@ const SnackbarMessage = forwardRef((props, ref) => {
 			default: createFlatIcon("fi-br-comment"),
 			error: createFlatIcon("fi-br-exclamation"),
 			warning: createFlatIcon("fi-br-exclamation"),
+			santa: createFlatIcon("fi-br-tree-christmas"),
 		}[variant]
 
 	return (

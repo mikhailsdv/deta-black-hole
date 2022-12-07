@@ -20,6 +20,10 @@
 	&.warning {
 		background-color: rgb(236, 134, 0);
 	}
+	&.santa {
+		background-color: rgb(113,23,0);
+		background-image: url("../../images/snowflakes.webp");
+	}
 	&.default {
 		background-color: $block-placeholder-color;
 	}

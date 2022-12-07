@@ -5,19 +5,20 @@ import Slide from "@mui/material/Slide"
 
 //import "./index.scss"
 
-const SnackbarProvider_ = props => {
+const SnackbarProvider_ = ({children, ...rest}) => {
 	return (
 		<SnackbarProvider
 			anchorOrigin={{
 				vertical: "bottom",
 				horizontal: "left",
 			}}
-			autoHideDuration={3000}
+			autoHideDuration={4000}
 			TransitionComponent={Slide}
 			content={(key, message) => (
 				<SnackbarMessage id={key} {...message} />
 			)}
-			{...props}
+			children={children}
+			{...rest}
 		/>
 	)
 }

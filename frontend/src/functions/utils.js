@@ -31,7 +31,7 @@ const getFileFromImageUrl = url =>
 		const img = document.createElement("img")
 		img.src = url
 		img.setAttribute("crossorigin", "anonymous")
-		img.addEventListener("load", async e => {
+		img.addEventListener("load", async () => {
 			try {
 				const response = await fetch(url)
 				const data = await response.blob()
@@ -63,4 +63,15 @@ const getFileFromImageUrl = url =>
 		})
 	})
 
-export {pluralize, sleep, numberWithSpaces, downloadFile, getFileFromImageUrl}
+const arrayRandom = arr => {
+	return arr[Math.floor(Math.random() * arr.length)]
+}
+
+export {
+	pluralize,
+	sleep,
+	numberWithSpaces,
+	downloadFile,
+	getFileFromImageUrl,
+	arrayRandom,
+}
