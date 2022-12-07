@@ -20,6 +20,7 @@ Features:
 -   Group photos into folders (White Holes);
 -   Share your White Holes;
 -   Integration API;
+-   Built-in Surfer image search;
 -   Adaptive mobile version;
 -   Your images sorted by upload date by default;
 -   Available space indicator;
