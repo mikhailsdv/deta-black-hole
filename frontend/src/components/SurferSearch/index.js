@@ -66,6 +66,7 @@ export default function SurferSearch(props) {
 					query: queryTrim,
 					results: 12,
 				})
+				if (!items) throw new Error("Invalid items")
 				setImages(items)
 			} catch (err) {
 				console.error(err)

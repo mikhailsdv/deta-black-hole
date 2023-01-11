@@ -42,7 +42,7 @@ export default function Santa() {
 			setTimeout(() => {
 				setSide("")
 			}, 2000)
-			t = setTimeout(loop, 15000)
+			t = setTimeout(loop, 60000)
 		})()
 
 		return () => clearTimeout(t)

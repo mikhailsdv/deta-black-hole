@@ -5,7 +5,7 @@
 	z-index: 10;
 	display: none;
 	top: 20px;
-	width: 135px;
+	width: 110px;
 	//transform-origin: bottom;
 	-webkit-animation-duration: 1.5s;
 	animation-duration: 1.5s;
@@ -15,7 +15,7 @@
 
 	&.left {
 		display: block;
-		left: -135px;
+		left: -110px;
 		-webkit-animation-name: santa-left;
 		animation-name: santa-left;
 		transform-origin: 90% 90%;
@@ -23,7 +23,7 @@
 
 	&.right {
 		display: block;
-		right: -135px;
+		right: -110px;
 		-webkit-animation-name: santa-right;
 		animation-name: santa-right;
 		transform-origin: 10% 90%;
