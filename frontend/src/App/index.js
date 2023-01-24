@@ -19,7 +19,6 @@ import BottomPanel from "../components/BottomPanel"
 import DoubleClick from "../components/DoubleClick"
 import Image from "../components/Image"
 import WhiteHole from "../components/WhiteHole"
-import Santa from "../components/Santa"
 import Button from "../components/Button"
 import TextField from "../components/TextField"
 import IntegrationTemplate from "../components/IntegrationTemplate"
@@ -511,8 +510,6 @@ const App = () => {
 				setUser,
 			}}
 		>*/ <>
-			<Santa />
-
 			<PhotoDialog
 				{...photoDialogProps}
 				maxWidth={"sm"}
